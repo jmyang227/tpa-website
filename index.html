@@ -508,6 +508,28 @@ textarea.inp{min-height:92px;resize:vertical;font-family:'Inter',sans-serif}
 .tm-table td{padding:10px 8px;border-bottom:1px solid var(--line-2);color:var(--muted);text-align:right;font-family:'Oswald'}
 .tm-table td:first-child{text-align:left;color:var(--white);font-family:'Inter'}
 .tm-table tr:last-child td{border-bottom:none}
+.pl-head{display:flex;align-items:center;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.pl-head .pc{width:64px;height:50px;flex:0 0 auto;display:grid;place-items:center;border:1px solid var(--line);border-radius:4px;font-family:'Anton';color:var(--tc,var(--gold-bright))}
+.pl-head .pc.has-logo{border-color:transparent;padding:0}
+.pl-head .pc img{width:100%;height:100%;object-fit:contain;display:block}
+.pl-head .nm{font-family:'Anton';font-size:1.7rem;line-height:1.05;text-transform:uppercase}
+.pl-head .sub{font-family:'Oswald';text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--muted);margin-top:5px}
+.pl-avg{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
+.pl-avg .a{background:var(--charcoal);border:1px solid var(--line);border-radius:4px;padding:12px 6px;text-align:center}
+.pl-avg .a .v{font-family:'Anton';font-size:1.25rem;color:var(--gold-bright)}
+.pl-avg .a .l{font-family:'Oswald';text-transform:uppercase;letter-spacing:.1em;font-size:.54rem;color:var(--muted);margin-top:3px}
+.pl-log{width:100%;border-collapse:collapse;font-size:.88rem}
+.pl-log th{font-family:'Oswald';text-transform:uppercase;letter-spacing:.14em;font-size:.6rem;color:var(--gold);text-align:right;padding:8px 6px;border-bottom:1px solid var(--line)}
+.pl-log th:first-child{text-align:left}
+.pl-log td{padding:9px 6px;text-align:right;border-bottom:1px solid var(--line-2);color:var(--muted);font-family:'Oswald'}
+.pl-log td:first-child{text-align:left;color:var(--white)}
+.pl-log tfoot td{border-bottom:none;color:var(--gold-bright);font-weight:600}
+.pl-log .hi{color:var(--gold-bright)}
+.clickable-player{cursor:pointer}
+.clickable-player:hover,.clickable-player:focus-visible{color:var(--gold-bright);outline:none}
+.roster-players li.clickable-player:hover b{color:var(--gold-bright)}
+.lb-name.clickable-player:hover{color:var(--gold-bright)}
+.pl-empty{color:var(--muted);font-weight:300}
 @media(max-width:900px){.explore-grid,.info-grid{grid-template-columns:1fr 1fr}.venue-band{grid-template-columns:1fr}}
 @media(max-width:560px){.explore-grid,.info-grid{grid-template-columns:1fr}}
 @media(max-width:1080px){.stats-grid{grid-template-columns:repeat(3,1fr)}.stat:nth-child(3){border-right:none}.leaders-grid{grid-template-columns:repeat(2,1fr)}}
@@ -1243,6 +1265,13 @@ html.intro-play{overflow:hidden}
     <div class="admin-body" id="regBody"></div>
   </div>
 </div>
+<!-- PLAYER PROFILE -->
+<div class="admin-overlay" id="playerModal" role="dialog" aria-modal="true" aria-label="Player profile">
+  <div class="admin-panel" style="max-width:720px">
+    <div class="admin-top"><h3 id="playerModalTitle">Player</h3><button class="admin-close" id="playerModalClose" aria-label="Close player profile">✕</button></div>
+    <div class="admin-body" id="playerModalBody"></div>
+  </div>
+</div>
 <!-- TEAM PROFILE -->
 <div class="admin-overlay" id="teamModal" role="dialog" aria-modal="true" aria-label="Team profile">
   <div class="admin-panel" style="max-width:660px">
@@ -1285,7 +1314,7 @@ function divBundle(name,seedTeams,results,schedule,gotw,night){
 var SEED={
   meta:{season:'Season 5',title:'Gratitude',venue:'St. Sophia Greek Cathedral',address:'1324 S Normandie Ave, Los Angeles, CA 90006',night:'Tuesdays',time:'7:00 – 10:00 PM',
         seasonsPlayed:5,champions:4,week:5,pin:'5130',
-        leagueEmail:'jmyang227@gmail.com',web3key:'',
+        leagueEmail:'jmyang227@gmail.com',web3key:'',statsSheet:'',
         activeDivision:'open',divOrder:['open','invite']},
   divisions:{
     open:divBundle('Open Division',[],[],[],{aId:'',bId:'',date:'',note:''},'Wednesdays'),
@@ -1315,6 +1344,7 @@ function normalizeDB(){ // fill in newer fields + migrate older saves
      wholesale with the Supabase copy and then calls normalizeDB(), so anything keyed only
      to the localStorage path is skipped on any site backed by the cloud. */
   if(DB.meta&&!DB.meta.address)DB.meta.address=SEED.meta.address;
+  if(DB.meta&&typeof DB.meta.statsSheet!=='string')DB.meta.statsSheet='';
   if(DB.media&&DB.media.tiles&&DB.media.tiles.live&&DB.media.tiles.live.title==='Tuesday Live')DB.media.tiles.live.title='LiveStream';
   DB.meta=Object.assign({leagueEmail:'jmyang227@gmail.com',web3key:''},DB.meta);
   // Migrate flat (single-league) saves into the divisions model
@@ -1401,6 +1431,118 @@ function saveDB(){
   else if(isQuota(persist._e)){toast('Storage full — remove some photos or export a backup');}
   else{toast('Save unavailable in preview');}
   return ok;
+}
+
+
+/* ================= STATS SHEET =================
+   Reads a published-to-web CSV (Google Sheets: File > Share > Publish to web > CSV)
+   and rebuilds the per-player box scores from it. The sheet is the source of truth:
+   rows are applied in memory on every load and are NOT written to the database, so
+   editing the sheet is the only thing anyone needs to do each week.
+   Expected columns (header row, any order, case-insensitive):
+     Division, Week, Player, Team, PTS, REB, AST, STL, BLK, TO                        */
+var SHEET_STATUS={state:'idle',msg:'',matched:0,missing:[],at:null};
+
+function parseCSV(text){
+  var rows=[],row=[],cur='',q=false,i=0;
+  text=String(text).replace(/^﻿/,'').replace(/\r\n?/g,'\n');
+  for(;i<text.length;i++){
+    var c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else if(c==='"')q=true;
+    else if(c===','){row.push(cur);cur='';}
+    else if(c==='\n'){row.push(cur);cur='';rows.push(row);row=[];}
+    else cur+=c;
+  }
+  if(cur.length||row.length){row.push(cur);rows.push(row);}
+  return rows.filter(function(r){return r.some(function(v){return String(v).trim()!=='';});});
+}
+
+var COLS={division:['division','div'],week:['week','wk','gameweek'],player:['player','name','playername'],
+          team:['team','squad'],pts:['pts','points','p'],reb:['reb','rebounds','rebs','r'],
+          ast:['ast','assists','asts','a'],stl:['stl','steals','s'],blk:['blk','blocks','b'],
+          to:['to','turnovers','tov','turnover']};
+function headerMap(hdr){
+  var map={},norm=hdr.map(function(h){return nkey(h);});
+  Object.keys(COLS).forEach(function(k){
+    for(var i=0;i<norm.length;i++){ if(COLS[k].indexOf(norm[i])>-1){map[k]=i;return;} }
+  });
+  return map;
+}
+function num(v){var n=parseFloat(String(v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
+
+function applySheetRows(rows){
+  if(!rows.length) throw new Error('sheet is empty');
+  var map=headerMap(rows[0]);
+  ['week','player'].forEach(function(k){ if(map[k]===undefined) throw new Error('missing a "'+k+'" column'); });
+
+  var byDiv={},missing=[],matched=0;
+  Object.keys(DB.divisions).forEach(function(id){byDiv[id]=[];});
+
+  function findPlayer(name,divHint,teamHint){
+    var want=nkey(name); if(!want)return null;
+    var order=Object.keys(DB.divisions);
+    if(divHint){ var dh=nkey(divHint);
+      order=order.filter(function(id){var n=nkey(DB.divisions[id].name);return n===dh||n.indexOf(dh)>-1||dh.indexOf(id)>-1;})
+                 .concat(order); }
+    for(var i=0;i<order.length;i++){
+      var d=DB.divisions[order[i]]; if(!d)continue;
+      var hits=(d.players||[]).filter(function(pl){return nkey(pl.name)===want;});
+      if(hits.length>1&&teamHint){ var th=nkey(teamHint);
+        var narrowed=hits.filter(function(pl){var t=(d.teams||[]).filter(function(x){return x.id===pl.teamId;})[0];
+          return t&&(nkey(t.name)===th||nkey(t.short)===th);});
+        if(narrowed.length)hits=narrowed; }
+      if(hits.length)return {divId:order[i],player:hits[0]};
+    }
+    return null;
+  }
+
+  for(var r=1;r<rows.length;r++){
+    var row=rows[r];
+    var name=(row[map.player]||'').trim(); if(!name)continue;
+    var hit=findPlayer(name, map.division!==undefined?row[map.division]:'', map.team!==undefined?row[map.team]:'');
+    if(!hit){ if(missing.indexOf(name)<0)missing.push(name); continue; }
+    byDiv[hit.divId].push({id:'sheet_'+r,week:num(row[map.week])||1,playerId:hit.player.id,
+      pts:num(row[map.pts]),reb:num(row[map.reb]),ast:num(row[map.ast]),
+      stl:num(row[map.stl]),blk:num(row[map.blk]),to:num(row[map.to])});
+    matched++;
+  }
+  if(!matched) throw new Error('no player names in the sheet matched a roster');
+  Object.keys(byDiv).forEach(function(id){ DB.divisions[id].games=byDiv[id]; });
+  return {matched:matched,missing:missing};
+}
+
+function loadStatsSheet(){
+  var url=(DB.meta&&DB.meta.statsSheet||'').trim();
+  if(!url){SHEET_STATUS={state:'off',msg:'No stats sheet configured.',matched:0,missing:[],at:null};return Promise.resolve(false);}
+  SHEET_STATUS.state='loading';
+  var bust=url+(url.indexOf('?')>-1?'&':'?')+'_cb='+Date.now();
+  return fetch(bust,{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+    .then(function(text){
+      if(/^\s*</.test(text)) throw new Error('got a web page, not CSV — check the URL ends in output=csv');
+      var res=applySheetRows(parseCSV(text));
+      SHEET_STATUS={state:'ok',msg:res.matched+' stat rows loaded',matched:res.matched,missing:res.missing,at:new Date()};
+      renderAll();
+      return true;
+    })
+    .catch(function(e){
+      SHEET_STATUS={state:'error',msg:String(e.message||e),matched:0,missing:[],at:new Date()};
+      return false;  /* leave whatever data is already loaded untouched */
+    });
+}
+
+function sheetStatusText(){
+  var st=SHEET_STATUS;
+  if(st.state==='off')return 'Not configured — stats stay manual until a URL is saved.';
+  if(st.state==='loading')return 'Loading…';
+  if(st.state==='error')return 'Could not load: '+st.msg;
+  if(st.state==='ok'){
+    var t=st.matched+' rows loaded';
+    if(st.missing.length)t+=' · '+st.missing.length+' name(s) not on any roster: '+st.missing.slice(0,6).join(', ')+(st.missing.length>6?'…':'');
+    return t;
+  }
+  return '';
 }
 
 /* ================= CLOUD (Supabase live data + auth) ================= */
@@ -1541,7 +1683,7 @@ var LEAD={key:'pts',dir:'desc',q:''};
 var LB_STATS=['pts','reb','ast','stl','blk','to'];
 function lbRows(){
   return DIV().players.map(function(p){var s=pstats(p.id),t=teamById(p.teamId)||{short:'',color:'#c8a04a',name:''};
-    return {name:p.name,captain:p.captain,team:t.short,teamName:t.name,color:t.color,gp:s.gp,pts:s.ppg,reb:s.rpg,ast:s.apg,stl:s.spg,blk:s.bpg,to:s.topg};});
+    return {id:p.id,name:p.name,captain:p.captain,team:t.short,teamName:t.name,color:t.color,gp:s.gp,pts:s.ppg,reb:s.rpg,ast:s.apg,stl:s.spg,blk:s.bpg,to:s.topg};});
 }
 function renderLeaderboard(){
   var body=document.getElementById('lbBody');if(!body)return;
@@ -1559,7 +1701,7 @@ function renderLeaderboard(){
     body.innerHTML=rows.map(function(r,i){
       function cell(key){return '<td class="'+(k===key?'lb-active':'')+'">'+r[key].toFixed(1)+'</td>';}
       return '<tr><td class="lb-rank">'+(i+1)+'</td>'+
-        '<td class="lb-name"><span class="lb-dot" style="background:'+r.color+'"></span>'+esc(r.name)+(r.captain?'<span class="cap-badge">C</span>':'')+'</td>'+
+        '<td class="lb-name clickable-player" data-player="'+r.id+'" tabindex="0" role="button" aria-label="View '+esc(r.name)+' game log"><span class="lb-dot" style="background:'+r.color+'"></span>'+esc(r.name)+(r.captain?'<span class="cap-badge">C</span>':'')+'</td>'+
         '<td>'+esc(r.team)+'</td>'+
         '<td class="'+(k==='gp'?'lb-active':'')+'">'+r.gp+'</td>'+
         cell('pts')+cell('reb')+cell('ast')+cell('stl')+cell('blk')+cell('to')+'</tr>';
@@ -1825,7 +1967,7 @@ function renderRosters(){
   document.getElementById('rosterGrid').innerHTML=st.map(function(t,i){
     var roster=playersOf(t.id);
     var lis=roster.map(function(p){
-      return '<li><b>'+p.name+'</b>'+(p.captain?'<span class="cap-badge">Capt</span>':'')+(p.temp?'<span class="temp">temp</span>':'')+'</li>';
+      return '<li class="clickable-player" data-player="'+p.id+'" tabindex="0" role="button" aria-label="View '+esc(p.name)+' game log"><b>'+p.name+'</b>'+(p.captain?'<span class="cap-badge">Capt</span>':'')+(p.temp?'<span class="temp">temp</span>':'')+'</li>';
     }).join('');
     return '<div class="roster reveal '+(i%2?'d1':'')+'" style="--tc:'+t.color+'">'+
       '<div class="roster-head"><span class="rc'+(teamLogo(t)?' has-logo':'')+'">'+(teamLogo(t)?'<img src="'+teamLogo(t)+'" alt="" loading="lazy">':t.short)+'</span><span class="rn">'+t.name+'</span>'+
@@ -1972,7 +2114,7 @@ function openTeam(id){
   var rows=roster.map(function(p){
     var s=pstats(p.id), has=s.gp>0;
     function c(v){return has?v.toFixed(1):'—';}
-    return '<tr><td>'+esc(p.name)+(p.captain?'<span class="cap-badge">Capt</span>':'')+(p.temp?'<span class="temp">temp</span>':'')+'</td>'+
+    return '<tr class="clickable-player" data-player="'+p.id+'" tabindex="0" role="button" aria-label="View '+esc(p.name)+' game log"><td>'+esc(p.name)+(p.captain?'<span class="cap-badge">Capt</span>':'')+(p.temp?'<span class="temp">temp</span>':'')+'</td>'+
       '<td>'+c(s.ppg)+'</td><td>'+c(s.rpg)+'</td><td>'+c(s.apg)+'</td><td>'+c(s.spg)+'</td><td>'+c(s.bpg)+'</td></tr>';
   }).join('');
   document.getElementById('teamModalTitle').innerHTML='<span class="mark'+(teamLogo(t)?' has-logo':'')+'">'+(teamLogo(t)?'<img src="'+teamLogo(t)+'" alt="" loading="lazy">':esc(t.short))+'</span> Team Profile';
@@ -1984,7 +2126,61 @@ function openTeam(id){
     (anyStats?'':'<div class="hint" style="margin-top:16px">Per-game averages appear here automatically once weekly box scores are entered in the admin panel.</div>');
   teamModal.classList.add('open');
 }
+
+/* ---------- PLAYER PROFILE ---------- */
+function openPlayer(pid){
+  var modal=document.getElementById('playerModal'); if(!modal)return;
+  var d=DIV(), pl=(d.players||[]).filter(function(x){return x.id===pid;})[0];
+  if(!pl)return;
+  var team=(d.teams||[]).filter(function(t){return t.id===pl.teamId;})[0]||{name:'—',short:'',color:'#c8a04a'};
+  var logs=(d.games||[]).filter(function(g){return g.playerId===pid;})
+                        .sort(function(a,b){return (a.week||0)-(b.week||0);});
+  var s=pstats(pid);
+  var K=['pts','reb','ast','stl','blk','to'], L=['PTS','REB','AST','STL','BLK','TO'];
+  var best={}; K.forEach(function(k){ best[k]=logs.reduce(function(m,g){return Math.max(m,+g[k]||0);},0); });
+
+  var head='<div class="pl-head" style="--tc:'+team.color+'">'+
+    '<span class="pc'+(teamLogo(team)?' has-logo':'')+'">'+
+      (teamLogo(team)?'<img src="'+teamLogo(team)+'" alt="">':esc(team.short||'')) +'</span>'+
+    '<div><div class="nm">'+esc(pl.name)+'</div><div class="sub">'+esc(team.name)+
+      (pl.captain?' · Captain':'')+(pl.temp?' · Sub':'')+' · '+s.gp+' game'+(s.gp===1?'':'s')+'</div></div></div>';
+
+  if(!logs.length){
+    document.getElementById('playerModalBody').innerHTML=head+
+      '<div class="pl-empty">No games recorded yet. Box scores appear here as soon as they are entered in the admin panel.</div>';
+  } else {
+    var avg='<div class="pl-avg">'+
+      [['ppg','PPG'],['rpg','RPG'],['apg','APG'],['spg','SPG'],['bpg','BPG'],['topg','TO']]
+      .map(function(a){return '<div class="a"><div class="v">'+s[a[0]].toFixed(1)+'</div><div class="l">'+a[1]+'</div></div>';}).join('')+'</div>';
+    var body=logs.map(function(g){
+      return '<tr><td>Week '+(g.week||'—')+'</td>'+
+        K.map(function(k){var v=+g[k]||0;
+          return '<td'+(k!=='to'&&v>0&&v===best[k]?' class="hi"':'')+'>'+v+'</td>';}).join('')+'</tr>';
+    }).join('');
+    var tot=K.map(function(k){return logs.reduce(function(a,g){return a+(+g[k]||0);},0);});
+    var table='<table class="pl-log"><thead><tr><th>Game</th>'+
+      L.map(function(l){return '<th>'+l+'</th>';}).join('')+'</tr></thead><tbody>'+body+'</tbody>'+
+      '<tfoot><tr><td>Total</td>'+tot.map(function(v){return '<td>'+v+'</td>';}).join('')+'</tr></tfoot></table>';
+    document.getElementById('playerModalBody').innerHTML=head+avg+table;
+  }
+  document.getElementById('playerModalTitle').textContent='Player Profile';
+  modal.classList.add('open');
+}
+function closePlayer(){var m=document.getElementById('playerModal');if(m)m.classList.remove('open');}
+
 document.addEventListener('click',function(e){var c=e.target.closest('.team-card[data-team]');if(c)openTeam(c.getAttribute('data-team'));});
+document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-player]'); if(!el)return;
+  e.stopPropagation(); openPlayer(el.getAttribute('data-player'));
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var el=e.target.closest&&e.target.closest('[data-player]');
+  if(el){e.preventDefault();openPlayer(el.getAttribute('data-player'));}
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closePlayer();});
+(function(){var c=document.getElementById('playerModalClose');if(c)c.addEventListener('click',closePlayer);
+ var m=document.getElementById('playerModal');if(m)m.addEventListener('click',function(e){if(e.target===m)closePlayer();});})();
 document.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var c=e.target.closest&&e.target.closest('.team-card[data-team]');if(c){e.preventDefault();openTeam(c.getAttribute('data-team'));}});
 document.getElementById('teamModalClose').addEventListener('click',function(){teamModal.classList.remove('open');});
 teamModal.addEventListener('click',function(e){if(e.target===teamModal)teamModal.classList.remove('open');});
@@ -2237,6 +2433,36 @@ function importRecords(text){
   });
   return {updated:updated,skipped:skipped,errs:errs};
 }
+function statLineCount(){
+  var d=DIV(), n=(d&&d.games)?d.games.length:0;
+  return n===1 ? '1 stat line currently stored.' : n+' stat lines currently stored.';
+}
+/* Remove box scores for the active division only. week=null clears every week.
+   Rosters, teams, results and schedule are deliberately untouched. */
+function clearStats(week){
+  var d=DIV(), all=d.games||[];
+  var doomed = (week==null) ? all.slice() : all.filter(function(g){return g.week===week;});
+  if(!doomed.length) return {removed:0,kept:all.length};
+  /* rescue copy first - re-importable if this was a mistake */
+  try{
+    var byId={}; (d.players||[]).forEach(function(pl){byId[pl.id]=pl;});
+    var teamById={}; (d.teams||[]).forEach(function(t){teamById[t.id]=t;});
+    var rows=[['Team','Player','Week','PTS','REB','AST','STL','BLK','TO']];
+    doomed.forEach(function(g){
+      var pl=byId[g.playerId]||{}, t=teamById[pl.teamId]||{};
+      rows.push([t.name||'',pl.name||'',g.week,g.pts||0,g.reb||0,g.ast||0,g.stl||0,g.blk||0,g.to||0]);
+    });
+    var csv=rows.map(function(r){return r.map(function(v){
+      v=String(v); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }).join(',');}).join('\n');
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+    a.download='tpa-cleared-stats-'+(DB.meta.activeDivision||'div')+'-'+(week==null?'all':'wk'+week)+'-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+  }catch(e){ /* a failed download must not block the clear */ }
+  d.games = (week==null) ? [] : all.filter(function(g){return g.week!==week;});
+  return {removed:doomed.length,kept:d.games.length};
+}
 function tabImport(){
   return '<h4>Bulk Import — '+esc(DIV().name)+'</h4>'+
     '<div class="hint">Paste a whole week (or several) at once instead of typing team-by-team. Everything imports into the <b>'+esc(DIV().name)+'</b> division — switch divisions with the selector at the top. Copy rows straight from Excel or Google Sheets and paste them in, or upload a saved <b>.csv</b>.</div>'+
@@ -2251,6 +2477,11 @@ function tabImport(){
     '<div class="hint">Optional. Columns: <b>Team, Wins, Losses</b> — one row per team. This sets each team’s W–L, which drives the standings order. (Teams must already exist, or be created by a box-score import above.)</div>'+
     '<div class="fld"><label>Paste records</label><textarea class="inp" id="impRecText" style="min-height:90px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem" placeholder="Team,Wins,Losses&#10;Kings,4,1&#10;Hawks,3,2"></textarea></div>'+
     '<div style="margin-top:8px"><button class="btn-sm primary" id="impRecBtn">Import Records</button></div>'+
+    '<h4 style="margin-top:32px">3 · Clear Box Scores</h4>'+
+    '<div class="hint">Deletes stat lines for <b>'+esc(DIV().name)+'</b> only. Teams, players, rosters, results and the schedule are left untouched. A rescue copy of whatever is deleted downloads first, so a mistake can be re-imported.</div>'+
+    '<div class="fld" style="max-width:280px"><label>Week (leave blank for every week)</label><input class="inp" id="clrWeek" type="number" min="1" placeholder="all weeks"></div>'+
+    '<div style="margin-top:8px"><button class="btn-sm" id="clrStatsBtn" style="border-color:rgba(224,85,85,.55);color:#ff9a9a">Clear box scores</button> '+
+      '<span class="hint" style="margin-left:10px">'+statLineCount()+'</span></div>'+
     '<div id="impLog" style="margin-top:18px;white-space:pre-wrap;font-size:.86rem;color:var(--gold-bright);min-height:20px"></div>';
 }
 function tabSettings(){
@@ -2260,6 +2491,11 @@ function tabSettings(){
     '<div class="fld"><label>Season title</label><input class="inp" id="sTitle" value="'+esc(m.title)+'"></div></div>'+
     '<div class="row"><div class="fld"><label>Venue</label><input class="inp" id="sVenue" value="'+esc(m.venue)+'"></div>'+
     '<div class="fld"><label>Address</label><input class="inp" id="sAddress" value="'+esc(m.address||'')+'"></div></div>'+
+    '<div class="row"><div class="fld" style="flex:1 1 100%"><label>Stats sheet CSV URL <span style="color:var(--muted-2);font-weight:400">— Google Sheets: File → Share → Publish to web → CSV</span></label>'+
+      '<input class="inp" id="sStatsSheet" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?output=csv" value="'+esc(m.statsSheet||'')+'"></div></div>'+
+    '<div class="row"><div class="fld" style="flex:1 1 100%">'+
+      '<button class="btn-sm" id="statsRefresh" type="button">↻ Reload stats from sheet</button> '+
+      '<span id="statsStatus" class="hint" style="margin-left:10px">'+esc(sheetStatusText())+'</span></div></div>'+
     '<div class="row">'+
     '<div class="fld"><label>Game night — '+esc(DIV().name)+'</label><input class="inp" id="sNight" value="'+esc(DIV().night)+'"></div>'+
     '<div class="fld"><label>Time</label><input class="inp" id="sTime" value="'+esc(m.time)+'"></div></div>'+
@@ -2420,12 +2656,26 @@ function wire(){
     if(DB._editStory===id){DB._editStory='';stagedStoryImg=null;}
     saveDB();renderAll();renderAdmin();toast('Story deleted');});});
   // import
-  function impLog(msg){var el=q('impLog');if(el)el.textContent=msg;}
+  
+function impLog(msg){var el=q('impLog');if(el)el.textContent=msg;}
   if(q('dlTemplate'))q('dlTemplate').addEventListener('click',function(){
     var csv='Team,Player,Week,PTS,REB,AST,STL,BLK,TO\nKings,John Smith,1,22,5,7,2,1,3\nKings,Mike Lee,1,14,9,3,1,0,2\nHawks,Chris Park,1,18,4,6,3,2,4\n';
     var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tpa-boxscore-template.csv';a.click();});
   if(q('impBoxFile'))q('impBoxFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;
     var rd=new FileReader();rd.onload=function(){if(q('impBoxText'))q('impBoxText').value=rd.result;impLog('Loaded “'+f.name+'”. Review it, then click Import Box Scores.');};rd.readAsText(f);});
+  if(q('clrStatsBtn'))q('clrStatsBtn').addEventListener('click',function(){
+    var raw=q('clrWeek')?q('clrWeek').value.trim():'';
+    var week = raw==='' ? null : parseInt(raw,10);
+    if(week!==null&&(!isFinite(week)||week<1)){impLog('Enter a whole week number, or leave it blank to clear every week.');return;}
+    var d=DIV(), all=d.games||[];
+    var n = (week==null) ? all.length : all.filter(function(g){return g.week===week;}).length;
+    if(!n){impLog(week==null?'There are no box scores to clear in '+DIV().name+'.':'No box scores found for week '+week+' in '+DIV().name+'.');return;}
+    var what = (week==null) ? 'ALL '+n+' stat line'+(n===1?'':'s') : n+' stat line'+(n===1?'':'s')+' from week '+week;
+    if(!confirm('Delete '+what+' in '+DIV().name+'?\n\nTeams, players and results are NOT affected. A rescue CSV downloads first so you can re-import if this is a mistake.\n\nThis cannot be undone from inside the site.'))return;
+    var res=clearStats(week);
+    saveDB();renderAll();renderAdmin();
+    impLog('✓ Cleared '+res.removed+' stat line'+(res.removed===1?'':'s')+' from '+DIV().name+'. '+res.kept+' remaining. A rescue CSV was downloaded.');
+  });
   if(q('impBoxBtn'))q('impBoxBtn').addEventListener('click',function(){
     var txt=q('impBoxText')?q('impBoxText').value:'';if(!txt.trim()){impLog('Paste or upload some rows first.');return;}
     var res=importBoxScores(txt,q('impCreate')?q('impCreate').checked:true);
@@ -2447,10 +2697,14 @@ function wire(){
     if(res.errs.length)msg+='\n\n'+res.errs.slice(0,8).join('\n');
     impLog(msg);if(q('impRecText'))q('impRecText').value='';});
   // settings
+  if(q('statsRefresh'))q('statsRefresh').addEventListener('click',function(){
+    var el=q('statsStatus'); if(el)el.textContent='Loading…';
+    loadStatsSheet().then(function(){ if(q('statsStatus'))q('statsStatus').textContent=sheetStatusText(); });
+  });
   if(q('saveSettings'))q('saveSettings').addEventListener('click',function(){
     var m=DB.meta;m.season=q('sSeason').value;m.title=q('sTitle').value;m.venue=q('sVenue').value;if(q('sAddress'))m.address=q('sAddress').value.trim();if(q('sNight'))DIV().night=q('sNight').value;m.time=q('sTime').value;
     m.seasonsPlayed=+q('sSeasons').value||0;m.champions=+q('sChamps').value||0;m.week=+q('sWeek').value||1;if(q('sPin'))m.pin=q('sPin').value||'5130';
-    m.leagueEmail=q('sEmail').value.trim()||m.leagueEmail;m.web3key=q('sWeb3').value.trim();
+    m.leagueEmail=q('sEmail').value.trim()||m.leagueEmail;m.web3key=q('sWeb3').value.trim();if(q('sStatsSheet'))m.statsSheet=q('sStatsSheet').value.trim();
     saveDB();renderAll();toast('Settings saved ✓');
   });
   if(q('addDiv'))q('addDiv').addEventListener('click',function(){
@@ -2634,7 +2888,7 @@ renderAll();
 setupLeaderboard();
 setupNews();
 router();
-syncFromCloud(); /* pull live data from the cloud, then re-render */
+syncFromCloud().then(function(){return loadStatsSheet();}); /* cloud first, then the stats sheet on top */
 </script>
 </body>
 </html>
