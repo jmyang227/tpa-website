@@ -1683,11 +1683,15 @@ function teamDiff(teamId){
 function fmtDiff(n){return (n>0?'+':n<0?'−':'')+Math.abs(n);}
 function sortedTeams(){
   return DIV().teams.slice().sort(function(a,b){
+    /* Record decides the order: win percentage, then more wins (2-0 outranks 1-0,
+       which are equal on percentage but not equal records). Point differential is
+       only reached when the records are genuinely identical, as Rules 08 states. */
     var pa=(a.wins+a.losses)?a.wins/(a.wins+a.losses):0, pb=(b.wins+b.losses)?b.wins/(b.wins+b.losses):0;
     if(pb!==pa)return pb-pa;
-    var da=teamDiff(a.id), db=teamDiff(b.id);   /* rules: ties broken by point differential */
-    if(db!==da)return db-da;
-    return b.wins-a.wins;
+    if(b.wins!==a.wins)return b.wins-a.wins;
+    if(a.losses!==b.losses)return a.losses-b.losses;
+    var da=teamDiff(a.id), db=teamDiff(b.id);
+    return db-da;
   });
 }
 function initials(name){var w=name.trim().split(/\s+/);return (w[0][0]+(w[1]?w[1][0]:'')).toUpperCase();}
