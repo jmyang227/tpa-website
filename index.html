@@ -164,6 +164,15 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .standings-table td.rank{font-family:'Anton';color:var(--gold-bright);width:40px}
 .standings-table td.tm{color:var(--white);font-family:'Oswald';text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:10px}
 .standings-table td.rec{font-family:'Anton';color:var(--white)}
+.standings-table td.diff{font-family:'Anton';color:var(--muted);white-space:nowrap}
+.standings-table td.diff.pos{color:var(--gold-bright)}
+.standings-table td.diff.neg{color:var(--muted-2)}
+.standings-table td.pct{white-space:nowrap}
+@media(max-width:560px){
+  .standings-table{font-size:.84rem}
+  .standings-table th,.standings-table td{padding:12px 9px}
+  .standings-table td.pct,.standings-table th:last-child{display:none}
+}
 .teams-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .team-card{aspect-ratio:1/1.12;background:var(--charcoal-2);border:1px solid var(--line);border-radius:4px;position:relative;overflow:hidden;cursor:pointer;transition:.5s var(--ease);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;text-align:center}
 .team-card:hover{border-color:rgba(200,160,74,.5);transform:translateY(-6px)}
@@ -190,6 +199,10 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .roster-players{list-style:none;padding:16px 24px 22px;columns:2;column-gap:24px}
 .roster-players li{font-size:.92rem;color:var(--muted);padding:7px 0;font-weight:300;break-inside:avoid;border-bottom:1px solid var(--line-2)}
 .roster-players li b{color:var(--white);font-weight:500}
+/* Captain / sub badges. Defined unscoped so every context — rosters list, team
+   profile table, leaderboard, player panel — renders them identically. */
+.cap-badge{display:inline-block;font-family:'Oswald',sans-serif;font-size:.54rem;letter-spacing:.14em;color:var(--gold-bright);border:1px solid var(--gold-deep);border-radius:2px;padding:1px 5px;margin-left:6px;vertical-align:middle;text-transform:uppercase}
+.temp{color:var(--muted-2);font-size:.72rem;font-style:italic;margin-left:5px}
 .roster-players li .cap-badge{display:inline-block;font-family:'Oswald';font-size:.54rem;letter-spacing:.14em;color:var(--gold-bright);border:1px solid var(--gold-deep);border-radius:2px;padding:1px 5px;margin-left:6px;vertical-align:middle;text-transform:uppercase}
 .roster-players li .temp{color:var(--muted-2);font-size:.72rem;font-style:italic;margin-left:5px}
 .players{background:linear-gradient(180deg,var(--black),var(--charcoal))}
@@ -530,6 +543,10 @@ textarea.inp{min-height:92px;resize:vertical;font-family:'Inter',sans-serif}
 .roster-players li.clickable-player:hover b{color:var(--gold-bright)}
 .lb-name.clickable-player:hover{color:var(--gold-bright)}
 .pl-empty{color:var(--muted);font-weight:300}
+.potw-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+.potw-item .thumb{position:relative}
+.potw-item .potw-name{margin-top:6px;font-size:.82rem;padding:7px 9px}
+@media(max-width:640px){.potw-list{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){.explore-grid,.info-grid{grid-template-columns:1fr 1fr}.venue-band{grid-template-columns:1fr}}
 @media(max-width:560px){.explore-grid,.info-grid{grid-template-columns:1fr}}
 @media(max-width:1080px){.stats-grid{grid-template-columns:repeat(3,1fr)}.stat:nth-child(3){border-right:none}.leaders-grid{grid-template-columns:repeat(2,1fr)}}
@@ -1022,7 +1039,7 @@ html.intro-play{overflow:hidden}
 <section class="media section-pad">
   <div class="wrap">
     <div class="media-grid">
-      <div class="tile reveal" id="potwTile"><div class="bg" id="potwBg"></div><div class="grad"></div><div class="cap"><div class="t" id="potwName">Player of the Week</div><div class="s">Player of the Week</div></div></div>
+      <div class="tile reveal" id="potwTile"><div class="bg" id="potwBg"></div><div class="grad"></div><div class="cap"><div class="t" id="potwName">Player of the Week</div><div class="s" id="potwSub">Player of the Week</div></div></div>
       <div class="tile reveal d1" id="galleryTile"><div class="bg" id="galleryBg"></div><div class="grad"></div><div class="cap"><div class="t">Courtside Gallery</div><div class="s" id="galleryCount">Game Photography</div></div></div>
       <div class="tile reveal d2" id="liveTile"><div class="bg" id="liveBg"></div><div class="grad"></div><div class="play">▶</div><div class="live-badge" id="liveBadge" style="display:none"><span class="dot"></span> Live</div><div class="cap"><div class="t" id="liveTitle">LiveStream</div><div class="s" id="liveSub">Live Streams</div></div></div>
     </div>
@@ -1320,7 +1337,7 @@ var SEED={
     open:divBundle('Open Division',[],[],[],{aId:'',bId:'',date:'',note:''},'Wednesdays'),
     invite:divBundle('Invite Division',[],[],[],{aId:'',bId:'',date:'',note:''},'Tuesdays')
   },
-  media:{potw:null,potwName:'',gallery:[],tiles:{live:{photo:null,title:'LiveStream',sub:'Live on Twitch',twitch:'rmdlathletics'},voices:{photo:null,title:'Voices of Koreatown',sub:'Community Stories'}}},
+  media:{potw:null,potwName:'',potwList:[],gallery:[],tiles:{live:{photo:null,title:'LiveStream',sub:'Live on Twitch',twitch:'rmdlathletics'},voices:{photo:null,title:'Voices of Koreatown',sub:'Community Stories'}}},
   news:[
     {id:'n_welcome',category:'Community',date:'2026-07-15',published:true,image:'',
      title:'Welcome to Stories of Koreatown',
@@ -1345,6 +1362,13 @@ function normalizeDB(){ // fill in newer fields + migrate older saves
      to the localStorage path is skipped on any site backed by the cloud. */
   if(DB.meta&&!DB.meta.address)DB.meta.address=SEED.meta.address;
   if(DB.meta&&typeof DB.meta.statsSheet!=='string')DB.meta.statsSheet='';
+  /* Player of the Week became a list (several games run on one night). Older saves
+     carry a single photo + name — fold them into the list so nothing is lost. */
+  if(DB.media){
+    if(!Array.isArray(DB.media.potwList))DB.media.potwList=[];
+    if(!DB.media.potwList.length&&DB.media.potw)
+      DB.media.potwList=[{photo:DB.media.potw,name:DB.media.potwName||''}];
+  }
   if(DB.media&&DB.media.tiles&&DB.media.tiles.live&&DB.media.tiles.live.title==='Tuesday Live')DB.media.tiles.live.title='LiveStream';
   DB.meta=Object.assign({leagueEmail:'jmyang227@gmail.com',web3key:''},DB.meta);
   // Migrate flat (single-league) saves into the divisions model
@@ -1646,10 +1670,24 @@ function leader(cat){
   arr.sort(function(a,b){return b.s[cat]-a.s[cat];});
   return arr[0];
 }
+/* Overall point differential across every recorded result in the active division.
+   Forfeits recorded as 20-0 count like any other game, per the league rules. */
+function teamDiff(teamId){
+  return (DIV().results||[]).reduce(function(acc,r){
+    var a=+r.aS||0, b=+r.bS||0;
+    if(r.aId===teamId)return acc+(a-b);
+    if(r.bId===teamId)return acc+(b-a);
+    return acc;
+  },0);
+}
+function fmtDiff(n){return (n>0?'+':n<0?'−':'')+Math.abs(n);}
 function sortedTeams(){
   return DIV().teams.slice().sort(function(a,b){
     var pa=(a.wins+a.losses)?a.wins/(a.wins+a.losses):0, pb=(b.wins+b.losses)?b.wins/(b.wins+b.losses):0;
-    if(pb!==pa)return pb-pa; return b.wins-a.wins;
+    if(pb!==pa)return pb-pa;
+    var da=teamDiff(a.id), db=teamDiff(b.id);   /* rules: ties broken by point differential */
+    if(db!==da)return db-da;
+    return b.wins-a.wins;
   });
 }
 function initials(name){var w=name.trim().split(/\s+/);return (w[0][0]+(w[1]?w[1][0]:'')).toUpperCase();}
@@ -1778,10 +1816,16 @@ function renderContact(){
 function renderMedia(){
   var m=DB.media||{gallery:[]};
   var pb=document.getElementById('potwBg'), pt=document.getElementById('potwTile'), pn=document.getElementById('potwName');
-  if(pb)pb.style.backgroundImage=m.potw?'url('+m.potw+')':'';
-  if(pb&&m.potw){pb.style.backgroundSize='cover';pb.style.backgroundPosition='center';}
-  if(pn&&m.potwName)pn.textContent=m.potwName;
-  if(pt){pt.style.cursor=m.potw?'pointer':'';pt.onclick=m.potw?function(){openLightbox([m.potw],0);}:null;}
+  var pl=(m.potwList||[]).filter(function(e){return e&&e.photo;});
+  var pPhotos=pl.map(function(e){return e.photo;});
+  if(pb)pb.style.backgroundImage=pPhotos.length?'url('+pPhotos[0]+')':'';
+  if(pb&&pPhotos.length){pb.style.backgroundSize='cover';pb.style.backgroundPosition='center';}
+  var named=pl.map(function(e){return (e.name||'').trim();}).filter(Boolean);
+  if(pn&&named.length)pn.textContent=named.join(' · ');
+  var ps=document.getElementById('potwSub');
+  if(ps)ps.textContent=pPhotos.length>1?(pPhotos.length+' Players · Tap to view'):'Player of the Week';
+  if(pt){pt.style.cursor=pPhotos.length?'pointer':'';
+    pt.onclick=pPhotos.length?function(){openLightbox(pPhotos,0);}:null;}
   var gb=document.getElementById('galleryBg'), gt=document.getElementById('galleryTile'), gc=document.getElementById('galleryCount');
   var g=m.gallery||[];
   if(gb)gb.style.backgroundImage=g.length?'url('+g[0]+')':'';
@@ -1947,10 +1991,13 @@ function renderSeason(){
       '<div class="when">'+(r.date||('Wk '+r.week))+'</div></div>';
   }).join('');
   var rows=st.map(function(t,i){
+    var df=teamDiff(t.id);
     return '<tr><td class="rank">'+(i+1)+'</td><td class="tm">'+crestHTML(t,'width:38px;height:26px;font-size:.6rem;')+''+t.name+'</td>'+
-      '<td class="rec">'+t.wins+'–'+t.losses+'</td><td>'+((t.wins+t.losses)?(t.wins/(t.wins+t.losses)).toFixed(3):'—')+'</td></tr>';
+      '<td class="rec">'+t.wins+'–'+t.losses+'</td>'+
+      '<td class="diff '+(df>0?'pos':df<0?'neg':'')+'">'+fmtDiff(df)+'</td>'+
+      '<td class="pct">'+((t.wins+t.losses)?(t.wins/(t.wins+t.losses)).toFixed(3):'—')+'</td></tr>';
   }).join('');
-  document.getElementById('standingsWrap').innerHTML='<table class="standings-table"><thead><tr><th>#</th><th>Team</th><th>Record</th><th>Win %</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  document.getElementById('standingsWrap').innerHTML='<table class="standings-table"><thead><tr><th>#</th><th>Team</th><th>Record</th><th title="Overall point differential">Diff</th><th>Win %</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 function renderTeams(){
   document.getElementById('teamsTitle').textContent=DIV().teams.length?(DIV().teams.length+' Squads. One Crown.'):'The Squads.';
@@ -2028,7 +2075,8 @@ function renderLeaders(){
   var scorer=leader('ppg');
   document.getElementById('leadersGrid').innerHTML=html;
   var potw=document.getElementById('potwName');
-  if(potw)potw.textContent=scorer?scorer.p.name:'Player of the Week';
+  var curated=(DB.media&&DB.media.potwList||[]).filter(function(e){return e&&e.photo&&(e.name||'').trim();});
+  if(potw&&!curated.length)potw.textContent=scorer?scorer.p.name:'Player of the Week';
 }
 function hexA(hex,a){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(function(c){return c+c;}).join('');var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return 'rgba('+r+','+g+','+b+','+a+')';}
 
@@ -2135,6 +2183,10 @@ function openPlayer(pid){
   var modal=document.getElementById('playerModal'); if(!modal)return;
   var d=DIV(), pl=(d.players||[]).filter(function(x){return x.id===pid;})[0];
   if(!pl)return;
+  /* The team profile is only ever a stepping stone to a player — close it so the
+     player panel is the single thing on screen. Done here rather than in the click
+     handler so keyboard activation and programmatic calls behave identically. */
+  var tm=document.getElementById('teamModal'); if(tm)tm.classList.remove('open');
   var team=(d.teams||[]).filter(function(t){return t.id===pl.teamId;})[0]||{name:'—',short:'',color:'#c8a04a'};
   var logs=(d.games||[]).filter(function(g){return g.playerId===pid;})
                         .sort(function(a,b){return (a.week||0)-(b.week||0);});
@@ -2328,16 +2380,19 @@ function tabPlayers(){
 }
 function tabMedia(){
   var m=DB.media;
-  var potwPrev=m.potw
-    ? '<div class="thumb-grid" style="grid-template-columns:repeat(3,1fr)"><div class="thumb"><img src="'+m.potw+'"><button data-potw-del="1">✕</button></div></div>'
-    : '<div class="hint" style="margin-top:6px">No photo uploaded yet.</div>';
+  var pl=(m.potwList||[]);
+  var potwPrev = pl.length
+    ? '<div class="potw-list">'+pl.map(function(e,i){
+        return '<div class="potw-item"><div class="thumb"><img src="'+e.photo+'"><button data-potw-del="'+i+'" title="Remove">✕</button></div>'+
+               '<input class="inp potw-name" data-potw-name="'+i+'" value="'+esc(e.name||'')+'" placeholder="Player name"></div>';
+      }).join('')+'</div>'
+    : '<div class="hint" style="margin-top:6px">No photos uploaded yet.</div>';
   var thumbs=(m.gallery||[]).map(function(src,i){
     return '<div class="thumb"><img src="'+src+'"><button data-gal-del="'+i+'">✕</button></div>';
   }).join('');
-  return '<h4>Player of the Week — Photo</h4><div class="hint">Upload a photo for the Player of the Week tile. The name shows automatically from your scoring leader; set a custom name below to override it.</div>'+
-    '<div class="fld"><label>Upload / replace photo</label><input class="inp" type="file" id="potwFile" accept="image/*"></div>'+potwPrev+
-    '<div class="row" style="margin-top:14px"><div class="fld"><label>Custom name (optional)</label><input class="inp" id="potwNameInp" value="'+esc(m.potwName||'')+'" placeholder="Leave blank to use scoring leader"></div>'+
-    '<div class="fld"><label>&nbsp;</label><button class="btn-sm primary" id="potwNameSave">Save name</button></div></div>'+
+  return '<h4>Players of the Week — Photos ('+pl.length+'/6)</h4><div class="hint">Several games run on a game night, so you can feature more than one player. Upload up to 6 photos (select several at once) and name each one. The tile shows the first photo and all the names; visitors tap it to flick through every photo. Leave every name blank to fall back to the scoring leader.</div>'+
+    '<div class="fld"><label>Add photos</label><input class="inp" type="file" id="potwFile" accept="image/*" multiple'+(pl.length>=6?' disabled':'')+'></div>'+potwPrev+
+    
     '<h4 style="margin-top:30px">Courtside Gallery — Photos ('+(m.gallery||[]).length+'/5)</h4><div class="hint">Upload up to 5 game photos (you can select several at once). Visitors tap the <b>Courtside Gallery</b> tile on the Media page to open them full-size in a slideshow. Photos are resized automatically to save space.</div>'+
     '<div class="fld"><label>Add photos</label><input class="inp" type="file" id="galFiles" accept="image/*" multiple'+((m.gallery||[]).length>=5?' disabled':'')+'></div>'+
     (thumbs?'<div class="thumb-grid">'+thumbs+'</div>':'<div class="hint">No photos yet.</div>')+
@@ -2599,12 +2654,33 @@ function wire(){
   document.querySelectorAll('[data-cap]').forEach(function(btn){btn.addEventListener('click',function(){
     var p=DIV().players.filter(function(x){return x.id===btn.dataset.cap;})[0];if(p){p.captain=!p.captain;saveDB();renderAll();renderAdmin();}});});
   // media
-  if(q('potwFile'))q('potwFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;
-    resizeImage(f,1280,.78,function(d){DB.media.potw=d;if(saveDB()){renderMedia();renderAdmin();}});});
+  if(q('potwFile'))q('potwFile').addEventListener('change',function(e){
+    var files=Array.prototype.slice.call(e.target.files); if(!files.length)return;
+    if(!Array.isArray(DB.media.potwList))DB.media.potwList=[];
+    var room=6-DB.media.potwList.length;
+    if(room<=0){toast('Remove one first — max 6 photos');return;}
+    var take=files.slice(0,room), done=0;
+    if(files.length>room)toast('Only room for '+room+' more');
+    take.forEach(function(f){
+      resizeImage(f,1080,.75,function(d){
+        DB.media.potwList.push({photo:d,name:''});
+        if(++done===take.length){DB.media.potw=DB.media.potwList[0].photo;
+          if(saveDB()){renderMedia();renderAdmin();}}
+      });
+    });
+  });
   document.querySelectorAll('[data-potw-del]').forEach(function(btn){btn.addEventListener('click',function(){
-    DB.media.potw=null;saveDB();renderMedia();renderAdmin();});});
-  if(q('potwNameSave'))q('potwNameSave').addEventListener('click',function(){
-    DB.media.potwName=q('potwNameInp').value.trim();saveDB();renderMedia();toast('Saved ✓');});
+    var i=+btn.getAttribute('data-potw-del');
+    if(Array.isArray(DB.media.potwList))DB.media.potwList.splice(i,1);
+    DB.media.potw=(DB.media.potwList[0]||{}).photo||null;
+    if(!DB.media.potwList.length)DB.media.potwName='';
+    saveDB();renderMedia();renderAdmin();});});
+  document.querySelectorAll('[data-potw-name]').forEach(function(inp){inp.addEventListener('change',function(){
+    var i=+inp.getAttribute('data-potw-name');
+    if(DB.media.potwList&&DB.media.potwList[i]){DB.media.potwList[i].name=inp.value.trim();
+      DB.media.potwName=(DB.media.potwList[0]||{}).name||'';
+      saveDB();renderMedia();toast('Saved ✓');}});});
+  
   if(q('galFiles'))q('galFiles').addEventListener('change',function(e){
     var files=Array.prototype.slice.call(e.target.files);if(!files.length)return;
     var room=5-DB.media.gallery.length;
