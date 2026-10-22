@@ -164,9 +164,7 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .standings-table td.rank{font-family:'Anton';color:var(--gold-bright);width:40px}
 .standings-table td.tm{color:var(--white);font-family:'Oswald';text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:10px}
 .standings-table td.rec{font-family:'Anton';color:var(--white)}
-.standings-table td.diff{font-family:'Anton';color:var(--muted);white-space:nowrap}
-.standings-table td.diff.pos{color:var(--gold-bright)}
-.standings-table td.diff.neg{color:var(--muted-2)}
+.standings-table td.diff{font-family:'Anton';color:var(--gold-bright);white-space:nowrap}
 .standings-table td.pct{white-space:nowrap}
 @media(max-width:560px){
   .standings-table{font-size:.84rem}
@@ -219,7 +217,7 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .player-stats .ps{text-align:center;background:var(--charcoal);border:1px solid var(--line);border-radius:3px;padding:14px 6px}
 .player-stats .ps .v{font-family:'Anton';font-size:1.4rem;color:var(--gold-bright)}
 .player-stats .ps .l{font-family:'Oswald';text-transform:uppercase;letter-spacing:.1em;font-size:.58rem;color:var(--muted);margin-top:4px}
-.leaders-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.leaders-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
 .mvp-ladder{display:flex;flex-direction:column;gap:12px;max-width:840px}
 .mvp-row{display:flex;align-items:center;gap:16px;background:linear-gradient(180deg,var(--charcoal-2),#161619);border:1px solid var(--line);border-radius:6px;padding:16px 22px;transition:.4s var(--ease)}
 .mvp-row:hover{border-color:rgba(200,160,74,.4);transform:translateX(4px)}
@@ -239,6 +237,8 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .leader .nm{font-family:'Oswald';text-transform:uppercase;font-size:1.05rem}
 .leader .val{font-family:'Anton';font-size:1.8rem;color:var(--white);margin-top:8px}
 .leader .unit{font-family:'Oswald';text-transform:uppercase;letter-spacing:.14em;font-size:.58rem;color:var(--muted-2)}
+.leader .avatar.has-logo{width:78px;height:58px;border-radius:0;background:transparent;border-color:transparent;padding:0}
+.leader .avatar.has-logo img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 3px 10px rgba(0,0,0,.55))}
 /* LEADERBOARD */
 .lb-controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
 .lb-controls #lbSearch{flex:1;min-width:220px;background:var(--charcoal-2);border:1px solid var(--line);border-radius:3px;padding:13px 16px;color:var(--white);font-family:'Inter';font-size:.92rem}
@@ -1664,8 +1664,9 @@ function pstats(pid){
   function avg(k){return gp?sum(k)/gp:0;}
   return {gp:gp,ppg:avg('pts'),rpg:avg('reb'),apg:avg('ast'),spg:avg('stl'),bpg:avg('blk'),topg:avg('to')};
 }
+var MIN_GP=3;   /* a player must have played this many games to appear on any leaderboard */
 function leader(cat){
-  var arr=DIV().players.map(function(p){return {p:p,s:pstats(p.id)};}).filter(function(x){return x.s.gp>0;});
+  var arr=DIV().players.map(function(p){return {p:p,s:pstats(p.id)};}).filter(function(x){return x.s.gp>=MIN_GP;});
   if(!arr.length)return null;
   arr.sort(function(a,b){return b.s[cat]-a.s[cat];});
   return arr[0];
@@ -1727,8 +1728,10 @@ function setDivision(id){if(!DB.divisions[id])return;DB.meta.activeDivision=id;p
 var LEAD={key:'pts',dir:'desc',q:''};
 var LB_STATS=['pts','reb','ast','stl','blk','to'];
 function lbRows(){
-  return DIV().players.map(function(p){var s=pstats(p.id),t=teamById(p.teamId)||{short:'',color:'#c8a04a',name:''};
-    return {id:p.id,name:p.name,captain:p.captain,team:t.short,teamName:t.name,color:t.color,gp:s.gp,pts:s.ppg,reb:s.rpg,ast:s.apg,stl:s.spg,blk:s.bpg,to:s.topg};});
+  return DIV().players.map(function(p){return {p:p,s:pstats(p.id)};})
+    .filter(function(x){return x.s.gp>=MIN_GP;})
+    .map(function(x){var p=x.p,s=x.s,t=teamById(p.teamId)||{short:'',color:'#c8a04a',name:''};
+      return {id:p.id,name:p.name,captain:p.captain,team:t.short,teamName:t.name,color:t.color,gp:s.gp,pts:s.ppg,reb:s.rpg,ast:s.apg,stl:s.spg,blk:s.bpg,to:s.topg};});
 }
 function renderLeaderboard(){
   var body=document.getElementById('lbBody');if(!body)return;
@@ -1861,7 +1864,7 @@ function fmtStoryDate(d){
   if(m.length===3){var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][(+m[1]-1)]||'';return mo+' '+(+m[2])+', '+m[0];}
   return String(d);
 }
-function bgUrl(u){return 'url("'+String(u||'').replace(/["\\]/g,'')+'")';}
+function bgUrl(u){return "url('"+String(u||'').replace(/['"\\]/g,'')+"')";}
 function publishedNews(){return (DB.news||[]).filter(function(a){return a&&a.published!==false;}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));});}
 function storyById(id){return (DB.news||[]).filter(function(a){return String(a.id)===String(id);})[0];}
 function storyCard(a){
@@ -2068,19 +2071,25 @@ function renderLeaders(){
     {key:'rpg',cat:'Rebounding Leader',unit:'Rebounds / Game'},
     {key:'apg',cat:'Assist Leader',unit:'Assists / Game'},
     {key:'spg',cat:'Steals Leader',unit:'Steals / Game'},
-    {key:'bpg',cat:'Blocks Leader',unit:'Blocks / Game'}
+    {key:'bpg',cat:'Blocks Leader',unit:'Blocks / Game'},
+    {key:'topg',cat:'Turnovers Leader',unit:'Turnovers / Game'}
   ];
   var html=cats.map(function(c,i){
     var L=leader(c.key);
     var nm=L?L.p.name:'To Be Announced', av=L?L.s[c.key].toFixed(1):'TBA', ic=L?initials(L.p.name):'?';
-    return '<div class="leader reveal '+(i?'d'+i:'')+'"><div class="cat">'+c.cat+'</div><div class="avatar">'+ic+'</div>'+
+    /* Show the leader's team crest where the initials used to sit; fall back to
+       initials when the team has no logo, or to '?' when there is no leader yet. */
+    var lt=L?(teamById(L.p.teamId)||null):null, lg=lt?teamLogo(lt):'';
+    var avatarHtml=lg?('<div class="avatar has-logo"><img src="'+lg+'" alt="'+esc(lt.name||'')+'" loading="lazy"></div>')
+                     :('<div class="avatar">'+ic+'</div>');
+    return '<div class="leader reveal '+(i?'d'+i:'')+'"><div class="cat">'+c.cat+'</div>'+avatarHtml+
       '<div class="nm">'+nm+'</div><div class="val">'+av+'</div><div class="unit">'+c.unit+'</div></div>';
   }).join('');
   var scorer=leader('ppg');
   document.getElementById('leadersGrid').innerHTML=html;
   var potw=document.getElementById('potwName');
   var curated=(DB.media&&DB.media.potwList||[]).filter(function(e){return e&&e.photo&&(e.name||'').trim();});
-  if(potw&&!curated.length)potw.textContent=scorer?scorer.p.name:'Player of the Week';
+  if(potw&&!curated.length)potw.textContent='Player of the Week';
 }
 function hexA(hex,a){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(function(c){return c+c;}).join('');var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return 'rgba('+r+','+g+','+b+','+a+')';}
 
