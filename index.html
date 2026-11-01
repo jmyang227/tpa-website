@@ -10,13 +10,14 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="The Program Association — Where Koreatown Competes" />
 <meta property="og:description" content="Koreatown's premier adult basketball league. Live standings, rosters, and stats." />
-<meta property="og:image" content="og-image.png" />
+<meta property="og:url" content="https://tpaleague.com" />
+<meta property="og:image" content="https://tpaleague.com/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The Program Association — Where Koreatown Competes" />
 <meta name="twitter:description" content="Koreatown's premier adult basketball league. Live standings, rosters, and stats." />
-<meta name="twitter:image" content="og-image.png" />
+<meta name="twitter:image" content="https://tpaleague.com/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -62,7 +63,7 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .nav-cta{padding:11px 22px;font-size:.75rem}
 .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .burger span{width:26px;height:2px;background:var(--white);transition:.3s}
-.mobile-menu{position:fixed;inset:0;background:rgba(10,10,11,.98);z-index:999;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px;transform:translateX(100%);transition:transform .5s var(--ease)}
+.mobile-menu{position:fixed;inset:0;background:rgba(10,10,11,.98);z-index:999;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px;padding:90px 20px 40px;overflow-y:auto;transform:translateX(100%);transition:transform .5s var(--ease)}
 .mobile-menu.open{transform:translateX(0)}
 .mobile-menu a{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.15em;font-size:1.5rem;color:var(--muted)}
 .mobile-menu a:hover{color:var(--gold-bright)}
@@ -366,6 +367,11 @@ header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(18px);border-
 .article-hero-img{width:100%;height:360px;background-size:cover;background-position:center;border-radius:6px;margin:8px 0 32px;background-color:var(--charcoal-3)}
 .article-body p{color:var(--text-2,#d1d1d5);font-weight:300;font-size:1.02rem;line-height:1.8;margin-bottom:20px}
 .article-back{display:inline-flex;align-items:center;gap:8px;font-family:'Oswald';text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--gold-bright);margin-bottom:26px}
+.pl-back{display:inline-flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:0;
+  font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--gold-bright);margin-bottom:18px}
+.pl-back:hover,.pl-back:focus-visible{color:var(--white);outline:none}
+.pl-back span{transition:transform .25s var(--ease)}
+.pl-back:hover span{transform:translateX(-3px)}
 .article-foot{margin-top:44px;padding-top:30px;border-top:1px solid var(--line);display:flex;gap:12px;flex-wrap:wrap}
 @media(max-width:900px){.story-grid{grid-template-columns:repeat(2,1fr)}.article-hero-img{height:240px}}
 @media(max-width:600px){.story-grid{grid-template-columns:1fr}.stories-controls{flex-direction:column;align-items:stretch}.stories-search{max-width:none}}
@@ -454,6 +460,28 @@ textarea.inp{min-height:92px;resize:vertical;font-family:'Inter',sans-serif}
 .nav-links a.btn-gold,.nav-links a.btn-gold.active{color:#0a0a0b}
 .nav-links a.btn-gold::after{display:none}
 .mobile-menu a.active{color:var(--gold-bright)}
+/* Division nav (separate Open / Invite pages) */
+.nav-drop{position:relative;display:flex;align-items:center}
+.nav-drop>a .caret{font-size:.55rem;opacity:.55;margin-left:5px;display:inline-block;transition:.3s var(--ease)}
+.nav-drop:hover>a .caret,.nav-drop:focus-within>a .caret{opacity:1;transform:translateY(2px)}
+.nav-drop-menu{position:absolute;top:100%;left:50%;min-width:184px;padding:8px 0;margin-top:0;
+  background:rgba(12,12,14,.98);border:1px solid var(--line);border-top:2px solid var(--gold);
+  display:flex;flex-direction:column;opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateX(-50%) translateY(10px);transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;
+  box-shadow:0 22px 44px -18px rgba(0,0,0,.85);z-index:60}
+.nav-drop:hover .nav-drop-menu,.nav-drop:focus-within .nav-drop-menu{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.nav-links .nav-drop-menu a{padding:10px 20px;font-size:.72rem;letter-spacing:.14em;white-space:nowrap}
+.nav-links .nav-drop-menu a::after{display:none}
+.nav-links .nav-drop-menu a:hover{color:var(--gold-bright);background:rgba(200,160,74,.07)}
+.nav-links .nav-drop-menu a.active{color:var(--gold-bright)}
+.mm-group{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
+.mobile-menu .mm-label{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.15em;font-size:1.22rem;color:var(--white)}
+.mobile-menu .mm-group a{font-size:.82rem;letter-spacing:.12em;padding:7px 13px;border:1px solid rgba(255,255,255,.16);border-radius:100px}
+.mobile-menu .mm-group a.active{border-color:var(--gold);background:rgba(200,160,74,.12);color:var(--gold-bright)}
+.hero-div-tag{display:flex;align-items:center;gap:10px;margin-top:18px;
+  font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.7rem;color:var(--gold-bright)}
+.hero-div-tag::before{content:"";width:26px;height:1px;background:var(--gold);flex:none}
+@media(max-width:400px){.mobile-menu .mm-label{font-size:1.05rem}.mobile-menu .mm-group a{font-size:.74rem;padding:6px 11px}}
 .page-hero{padding:150px 0 66px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;background:linear-gradient(180deg,var(--black) 0%,var(--charcoal) 100%)}
 .page-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 130% at 82% 0%,rgba(200,160,74,.13),transparent 55%);pointer-events:none}
 .page-hero .wrap{position:relative;z-index:2}
@@ -543,6 +571,8 @@ textarea.inp{min-height:92px;resize:vertical;font-family:'Inter',sans-serif}
 .roster-players li.clickable-player:hover b{color:var(--gold-bright)}
 .lb-name.clickable-player:hover{color:var(--gold-bright)}
 .pl-empty{color:var(--muted);font-weight:300}
+.sec-empty{color:var(--muted);font-weight:300;font-size:.95rem;padding:26px 0;border-top:1px solid var(--line-2)}
+.sec-empty b{color:var(--gold-bright);font-weight:600}
 .potw-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
 .potw-item .thumb{position:relative}
 .potw-item .potw-name{margin-top:6px;font-size:.82rem;padding:7px 9px}
@@ -718,7 +748,7 @@ html.intro-play{overflow:hidden}
   <div class="in-tag">WHERE KOREATOWN COMPETES</div>
   <div class="in-skip">Tap to enter</div>
 </div>
-<a href="#" class="skip-link" id="skipLink">Skip to content</a>
+<a href="#main" class="skip-link" id="skipLink">Skip to content</a>
 <div id="scrollBar"></div>
 
 <header id="header">
@@ -726,9 +756,27 @@ html.intro-play{overflow:hidden}
     <a href="#/home" class="logo" data-route="home"><span class="mark">TPA</span> The Program <b>Association</b></a>
     <nav class="nav-links">
       <a href="#/about" data-route="about">About</a>
-      <a href="#/league" data-route="league">League</a>
-      <a href="#/teams" data-route="teams">Teams</a>
-      <a href="#/schedule" data-route="schedule">Schedule</a>
+      <div class="nav-drop">
+        <a href="#/league" data-route="league" aria-haspopup="true">League<span class="caret">▾</span></a>
+        <div class="nav-drop-menu">
+          <a href="#/league/open" data-route="league" data-div-link="open">Open Division</a>
+          <a href="#/league/invite" data-route="league" data-div-link="invite">Invite Division</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <a href="#/teams" data-route="teams" aria-haspopup="true">Teams<span class="caret">▾</span></a>
+        <div class="nav-drop-menu">
+          <a href="#/teams/open" data-route="teams" data-div-link="open">Open Division</a>
+          <a href="#/teams/invite" data-route="teams" data-div-link="invite">Invite Division</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <a href="#/schedule" data-route="schedule" aria-haspopup="true">Schedule<span class="caret">▾</span></a>
+        <div class="nav-drop-menu">
+          <a href="#/schedule/open" data-route="schedule" data-div-link="open">Open Division</a>
+          <a href="#/schedule/invite" data-route="schedule" data-div-link="invite">Invite Division</a>
+        </div>
+      </div>
       <a href="#/media" data-route="media">Media</a>
       <a href="#/rules" data-route="rules">Rules</a>
       <a href="#/contact" data-route="contact">Contact</a>
@@ -739,9 +787,18 @@ html.intro-play{overflow:hidden}
 </header>
 <div class="mobile-menu" id="mobileMenu">
   <a href="#/about" data-route="about">About</a>
-  <a href="#/league" data-route="league">League</a>
-  <a href="#/teams" data-route="teams">Teams</a>
-  <a href="#/schedule" data-route="schedule">Schedule</a>
+  <div class="mm-group"><span class="mm-label">League</span>
+    <a href="#/league/open" data-route="league" data-div-link="open">Open</a>
+    <a href="#/league/invite" data-route="league" data-div-link="invite">Invite</a>
+  </div>
+  <div class="mm-group"><span class="mm-label">Teams</span>
+    <a href="#/teams/open" data-route="teams" data-div-link="open">Open</a>
+    <a href="#/teams/invite" data-route="teams" data-div-link="invite">Invite</a>
+  </div>
+  <div class="mm-group"><span class="mm-label">Schedule</span>
+    <a href="#/schedule/open" data-route="schedule" data-div-link="open">Open</a>
+    <a href="#/schedule/invite" data-route="schedule" data-div-link="invite">Invite</a>
+  </div>
   <a href="#/media" data-route="media">Media</a>
   <a href="#/rules" data-route="rules">Rules</a>
   <a href="#/contact" data-route="contact">Contact</a>
@@ -750,7 +807,7 @@ html.intro-play{overflow:hidden}
 <main id="app">
 
 <!-- ==================== HOME ==================== -->
-<div class="page" id="page-home">
+<div class="page" id="page-home"><a id="main" tabindex="-1"></a>
 <section class="hero">
   <div class="hero-bg"><div class="court"></div></div>
   <div class="wrap hero-inner">
@@ -777,7 +834,7 @@ html.intro-play{overflow:hidden}
     <div class="explore-grid">
       <a class="nav-card reveal" href="#/about"><div class="idx">01 — About</div><h3>The Program</h3><p>Our mission, the league experience, and a word from the commissioner.</p><span class="go">Learn more <span class="arrow">→</span></span></a>
       <a class="nav-card reveal d1" href="#/league"><div class="idx">02 — League</div><h3>Standings &amp; Stats</h3><p>Live standings, league leaders, and the players to watch this season.</p><span class="go">View the league <span class="arrow">→</span></span></a>
-      <a class="nav-card reveal d2" href="#/teams"><div class="idx">03 — Teams</div><h3>The Squads</h3><p>All eight teams and their complete rosters, sorted by record.</p><span class="go">Meet the teams <span class="arrow">→</span></span></a>
+      <a class="nav-card reveal d2" href="#/teams"><div class="idx">03 — Teams</div><h3>The Squads</h3><p>Every team in both divisions, with complete rosters, sorted by record.</p><span class="go">Meet the teams <span class="arrow">→</span></span></a>
       <a class="nav-card reveal" href="#/schedule"><div class="idx">04 — Schedule</div><h3>Games &amp; Results</h3><p>The Game of the Week, recent scores, and where the league plays.</p><span class="go">See the schedule <span class="arrow">→</span></span></a>
       <a class="nav-card reveal d1" href="#/media"><div class="idx">05 — Media</div><h3>The League In Motion</h3><p>Player of the Week, courtside galleries, and community stories.</p><span class="go">Open the media hub <span class="arrow">→</span></span></a>
       <a class="nav-card reveal d2" href="#/rules"><div class="idx">06 — Rules</div><h3>League Rules</h3><p>How the league runs — format, conduct, standings, and playoffs.</p><span class="go">Read the rules <span class="arrow">→</span></span></a>
@@ -861,9 +918,9 @@ html.intro-play{overflow:hidden}
     <span class="eyebrow reveal">The League</span>
     <h1 class="reveal d1">Standings &amp; <span class="lite">Stats.</span></h1>
     <p class="reveal d2" id="seasonSub">—</p>
+    <div class="hero-div-tag reveal d2" data-divlabel>Open Division</div>
   </div>
 </header>
-<div class="div-tabs-wrap reveal"><div class="division-tabs" data-divtabs role="tablist" aria-label="League divisions"></div></div>
 
 <section class="season section-pad">
   <div class="wrap">
@@ -871,7 +928,7 @@ html.intro-play{overflow:hidden}
       <span class="eyebrow reveal">Standings</span>
       <h2 class="reveal d1" id="seasonTitle">Season.</h2>
     </div>
-    <div class="standings-wrap reveal" id="standingsWrap"></div>
+    <div class="standings-wrap reveal" id="standingsWrap"><div class="sec-empty">Loading league data…</div></div>
   </div>
 </section>
 
@@ -882,7 +939,7 @@ html.intro-play{overflow:hidden}
       <h2 class="reveal d1">Who's On Top.</h2>
       <p class="reveal d2" id="leadersSub">Season averages update automatically as each week's box scores are entered.</p>
     </div>
-    <div class="leaders-grid" id="leadersGrid"></div>
+    <div class="leaders-grid" id="leadersGrid"><div class="sec-empty">Loading league data…</div></div>
   </div>
 </section>
 
@@ -893,7 +950,7 @@ html.intro-play{overflow:hidden}
       <h2 class="reveal d1">The Ladder.</h2>
       <p class="reveal d2">The top five contenders for Most Valuable Player, ranked #1 to #5.</p>
     </div>
-    <div class="mvp-ladder" id="mvpLadder"></div>
+    <div class="mvp-ladder" id="mvpLadder"><div class="sec-empty">Loading league data…</div></div>
   </div>
 </section>
 
@@ -932,7 +989,7 @@ html.intro-play{overflow:hidden}
           <th data-sk="blk">BLK <span class="lb-ar"></span></th>
           <th data-sk="to">TO <span class="lb-ar"></span></th>
         </tr></thead>
-        <tbody id="lbBody"></tbody>
+        <tbody id="lbBody"><tr><td colspan="10" style="text-align:center;color:var(--muted);padding:26px 12px">Loading league data…</td></tr></tbody>
       </table>
     </div>
     <p class="reveal" style="color:var(--muted-2);font-size:.8rem;font-weight:300;margin-top:14px">Per-game averages (GP = games played). Values populate automatically as weekly box scores are entered in the admin panel.</p>
@@ -946,7 +1003,7 @@ html.intro-play{overflow:hidden}
       <h2 class="reveal d1">The Names to Watch.</h2>
       <p class="reveal d2" id="playersSub">The athletes lighting up the scoreboard this season.</p>
     </div>
-    <div class="player-grid" id="playerGrid"></div>
+    <div class="player-grid" id="playerGrid"><div class="sec-empty">Loading league data…</div></div>
   </div>
 </section>
 </div>
@@ -957,10 +1014,10 @@ html.intro-play{overflow:hidden}
   <div class="wrap">
     <span class="eyebrow reveal">The Teams</span>
     <h1 class="reveal d1">Meet The <span class="lite">Squads.</span></h1>
-    <p class="reveal d2">Rosters battling every week for the division title — ranked by record.</p>
+    <p class="reveal d2">Six teams in the Invite Division, eight in the Open Division. Ranked by record.</p>
+    <div class="hero-div-tag reveal d2" data-divlabel>Open Division</div>
   </div>
 </header>
-<div class="div-tabs-wrap reveal"><div class="division-tabs" data-divtabs role="tablist" aria-label="League divisions"></div></div>
 
 <section class="section-pad">
   <div class="wrap">
@@ -969,7 +1026,7 @@ html.intro-play{overflow:hidden}
       <h2 class="reveal d1" id="teamsTitle">The Squads.</h2>
       <p class="reveal d2">Every roster battling each week for the season title.</p>
     </div>
-    <div class="teams-grid" id="teamsGrid"></div>
+    <div class="teams-grid" id="teamsGrid"><div class="sec-empty">Loading league data…</div></div>
   </div>
 </section>
 
@@ -980,7 +1037,7 @@ html.intro-play{overflow:hidden}
       <h2 class="reveal d1">Every Player. Every Team.</h2>
       <p class="reveal d2">The complete season rosters across all squads. Captains marked; late-season additions noted.</p>
     </div>
-    <div class="roster-grid" id="rosterGrid"></div>
+    <div class="roster-grid" id="rosterGrid"><div class="sec-empty">Loading league data…</div></div>
   </div>
 </section>
 </div>
@@ -992,9 +1049,9 @@ html.intro-play{overflow:hidden}
     <span class="eyebrow reveal">Schedule &amp; Results</span>
     <h1 class="reveal d1">Game <span class="lite">Day.</span></h1>
     <p class="reveal d2">The Game of the Week, recent results, and where the league plays.</p>
+    <div class="hero-div-tag reveal d2" data-divlabel>Open Division</div>
   </div>
 </header>
-<div class="div-tabs-wrap reveal"><div class="division-tabs" data-divtabs role="tablist" aria-label="League divisions"></div></div>
 
 <section class="season section-pad">
   <div class="wrap">
@@ -1003,22 +1060,22 @@ html.intro-play{overflow:hidden}
       <h2 class="reveal d1">Season Snapshot.</h2>
       <p class="reveal d2">Game night, the current leader, and the matchup everyone's watching.</p>
     </div>
-    <div class="season-grid" id="seasonCards"></div>
+    <div class="season-grid" id="seasonCards"><div class="sec-empty">Loading league data…</div></div>
 
     <div class="sec-head reveal" style="margin:56px 0 20px"><span class="eyebrow">Full Schedule</span><h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);text-transform:uppercase">Upcoming Games.</h2></div>
-    <div id="scheduleList"></div>
+    <div id="scheduleList"><div class="sec-empty">Loading league data…</div></div>
 
     <div class="sec-head reveal" style="margin:56px 0 24px"><span class="eyebrow">Recent Results</span></div>
-    <div class="matchups" id="resultsList"></div>
+    <div class="matchups" id="resultsList"><div class="sec-empty">Loading league data…</div></div>
 
     <div class="venue-band reveal">
       <div>
         <span class="eyebrow">Where We Play</span>
         <h3 style="font-size:1.7rem;text-transform:uppercase;margin:6px 0 14px" id="venVenue">St. Sophia Greek Cathedral</h3>
         <p style="color:var(--muted);font-weight:300">Koreatown, Los Angeles. Home to every TPA game night — packed gyms, competitive basketball, and community every week.</p>
-        <p style="color:var(--muted);font-weight:300;margin-top:12px"><b class="gold" id="venNight">Tuesdays</b> · <span id="venTime">7:00 – 10:00 PM</span></p>
+        <p style="color:var(--muted);font-weight:300;margin-top:12px"><b class="gold" id="venNight">Invite: Tuesdays · Open: Wednesdays</b> · <span id="venTime">7:00 – 10:00 PM</span></p>
         <p class="ven-addr"><span id="venAddress">1324 S Normandie Ave, Los Angeles, CA 90006</span></p>
-        <a class="ven-dir" id="venDirections" href="#" target="_blank" rel="noopener">Get Directions <span class="arrow">→</span></a>
+        <a class="ven-dir" id="venDirections" href="https://www.google.com/maps/search/?api=1&amp;query=1324+S+Normandie+Ave+Los+Angeles+CA+90006" target="_blank" rel="noopener">Get Directions <span class="arrow">→</span></a>
       </div>
       <div class="vmap"><div class="pin">📍 <span id="venPinVenue">St. Sophia</span><br><span id="venPinAddr">1324 S Normandie Ave, Los Angeles, CA 90006</span></div></div>
     </div>
@@ -1066,7 +1123,7 @@ html.intro-play{overflow:hidden}
         <button data-newscat="Updates">Updates</button>
       </div>
     </div>
-    <div class="story-grid" id="storyGrid"></div>
+    <div class="story-grid" id="storyGrid"><div class="sec-empty">Loading league data…</div></div>
     <div class="story-more-wrap"><button class="btn btn-ghost" id="storyMore" style="display:none">Load More Stories</button></div>
     <div class="subscribe-bar reveal">
       <h3>Never Miss a Story</h3>
@@ -1147,9 +1204,9 @@ html.intro-play{overflow:hidden}
     <div class="faq-list">
       <div class="faq-item reveal"><button class="faq-q">How do I register? <span class="pm">+</span></button><div class="faq-a"><p>Head to the Join page and choose Team Registration or Free Agent. Complete the form and league staff confirms your spot for the upcoming season.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">Can I join as a free agent? <span class="pm">+</span></button><div class="faq-a"><p>Absolutely. Sign up individually and we'll match you with a team that needs your position and skill level before the season tips off.</p></div></div>
-      <div class="faq-item reveal"><button class="faq-q">Where are games played? <span class="pm">+</span></button><div class="faq-a"><p>All games are hosted at St. Sophia Greek Cathedral in the heart of Koreatown, Los Angeles, between 7:00 and 10:00 PM. The Invite Division plays on Tuesday evenings and the Open Division plays on Wednesday evenings.</p></div></div>
-      <div class="faq-item reveal"><button class="faq-q">How long is each season? <span class="pm">+</span></button><div class="faq-a"><p>Both the Open and Invite divisions field nine teams. During the regular season, every team plays each of the others once, and the top eight then advance to the playoffs. From opening night through the championship, a full season runs approximately two and a half months.</p></div></div>
-      <div class="faq-item reveal"><button class="faq-q">How do playoffs work? <span class="pm">+</span></button><div class="faq-a"><p>The top 8 teams from the standings qualify for playoffs, culminating in a championship game to crown the season's champion.</p></div></div>
+      <div class="faq-item reveal"><button class="faq-q">Where are games played? <span class="pm">+</span></button><div class="faq-a"><p>All games are hosted at St. Sophia Greek Cathedral, 1324 S Normandie Ave, Los Angeles, CA 90006, between 7:00 and 10:00 PM. The Invite Division plays Tuesday evenings and the Open Division plays Wednesday evenings.</p></div></div>
+      <div class="faq-item reveal"><button class="faq-q">How long is each season? <span class="pm">+</span></button><div class="faq-a"><p>The Invite Division plays Tuesdays with six teams; the Open Division plays Wednesdays with eight. Both run 7:00–10:00 PM. From opening night through the championship, a full season runs approximately two and a half months.</p></div></div>
+      <div class="faq-item reveal"><button class="faq-q">How do playoffs work? <span class="pm">+</span></button><div class="faq-a"><p>Playoff qualification differs by division: in the <b class="fee">Invite Division</b> the top four teams qualify, and in the <b class="fee">Open Division</b> all eight teams qualify. Both divisions play a single-elimination bracket, culminating in a championship game to crown the season's champion.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">Are statistics recorded? <span class="pm">+</span></button><div class="faq-a"><p>Yes. Team standings, scores, and individual box scores are tracked every week, feeding the season averages, league leaders, and award races shown on this site.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">Are games photographed or streamed? <span class="pm">+</span></button><div class="faq-a"><p>Games receive photography and highlight coverage, and select matchups are streamed live for players, families, and fans.</p></div></div>
     </div>
@@ -1191,9 +1248,9 @@ html.intro-play{overflow:hidden}
 <section class="section-pad">
   <div class="wrap">
     <div class="info-grid">
-      <div class="info-card reveal"><div class="k">Email</div><div class="v"><a id="cEmail" href="#">the league</a></div><p>The fastest way to reach league staff for registration, questions, or partnerships.</p></div>
+      <div class="info-card reveal"><div class="k">Email</div><div class="v"><a id="cEmail" href="mailto:info@tpaleague.com">info@tpaleague.com</a></div><p>The fastest way to reach league staff for registration, questions, or partnerships.</p></div>
       <div class="info-card reveal d1"><div class="k">Venue</div><div class="v" id="cVenue">St. Sophia Greek Cathedral</div><p>Koreatown, Los Angeles — home of every TPA game night.</p></div>
-      <div class="info-card reveal d2"><div class="k">Game Night</div><div class="v" id="cNight">Tuesdays</div><p id="cTime">7:00 – 10:00 PM every week during the season.</p></div>
+      <div class="info-card reveal d2"><div class="k">Game Night</div><div class="v" id="cNight">Invite: Tuesdays · Open: Wednesdays</div><p id="cTime">7:00 – 10:00 PM every week during the season.</p></div>
     </div>
   </div>
 </section>
@@ -1203,7 +1260,7 @@ html.intro-play{overflow:hidden}
     <span class="eyebrow reveal">Stay Connected</span>
     <h2 class="reveal d1">Follow The Program.</h2>
     <p class="reveal d2">Highlights, announcements, and behind-the-scenes content — all week, every week.</p>
-    <div class="socials reveal d2"><a class="soc" href="https://www.instagram.com/rmdl_league/" target="_blank" rel="noopener">Instagram</a><span class="soc">YouTube</span><span class="soc clickable" id="socTwitch">Twitch</span></div>
+    <div class="socials reveal d2"><a class="soc" href="https://www.instagram.com/tpaleague/" target="_blank" rel="noopener">Instagram</a><span class="soc clickable" id="socTwitch">Twitch</span></div>
     <form class="newsletter reveal d3" id="newsletterForm"><input type="email" placeholder="Enter your email" aria-label="Email" required /><button class="btn btn-gold" type="submit">Sign Up</button><div class="nl-msg" id="nlMsg"></div></form>
   </div>
 </section>
@@ -1331,7 +1388,7 @@ function divBundle(name,seedTeams,results,schedule,gotw,night){
 var SEED={
   meta:{season:'Season 5',title:'Gratitude',venue:'St. Sophia Greek Cathedral',address:'1324 S Normandie Ave, Los Angeles, CA 90006',night:'Tuesdays',time:'7:00 – 10:00 PM',
         seasonsPlayed:5,champions:4,week:5,pin:'5130',
-        leagueEmail:'jmyang227@gmail.com',web3key:'',statsSheet:'',
+        leagueEmail:'info@tpaleague.com',web3key:'',statsSheet:'',
         activeDivision:'open',divOrder:['open','invite']},
   divisions:{
     open:divBundle('Open Division',[],[],[],{aId:'',bId:'',date:'',note:''},'Wednesdays'),
@@ -1362,6 +1419,7 @@ function normalizeDB(){ // fill in newer fields + migrate older saves
      to the localStorage path is skipped on any site backed by the cloud. */
   if(DB.meta&&!DB.meta.address)DB.meta.address=SEED.meta.address;
   if(DB.meta&&typeof DB.meta.statsSheet!=='string')DB.meta.statsSheet='';
+  if(DB.meta&&DB.meta.leagueEmail==='jmyang227@gmail.com')DB.meta.leagueEmail='info@tpaleague.com';
   /* Player of the Week became a list (several games run on one night). Older saves
      carry a single photo + name — fold them into the list so nothing is lost. */
   if(DB.media){
@@ -1370,7 +1428,7 @@ function normalizeDB(){ // fill in newer fields + migrate older saves
       DB.media.potwList=[{photo:DB.media.potw,name:DB.media.potwName||''}];
   }
   if(DB.media&&DB.media.tiles&&DB.media.tiles.live&&DB.media.tiles.live.title==='Tuesday Live')DB.media.tiles.live.title='LiveStream';
-  DB.meta=Object.assign({leagueEmail:'jmyang227@gmail.com',web3key:''},DB.meta);
+  DB.meta=Object.assign({leagueEmail:'info@tpaleague.com',web3key:''},DB.meta);
   // Migrate flat (single-league) saves into the divisions model
   if(!DB.divisions){
     DB.divisions={
@@ -1435,6 +1493,8 @@ TEAM_LOGOS['theprogramteam']=TEAM_LOGOS['invite:tpa'];
 TEAM_LOGOS['invite:theprogram']=TEAM_LOGOS['invite:tpa'];
 TEAM_LOGOS['theprogram']=TEAM_LOGOS['invite:tpa'];
 TEAM_LOGOS['programteam']=TEAM_LOGOS['invite:tpa'];
+TEAM_LOGOS['tpt']=TEAM_LOGOS['invite:tpa'];
+TEAM_LOGOS['invite:tpt']=TEAM_LOGOS['invite:tpa'];
 /* Undisputed Boyz — unscoped, so the crest resolves in either division. */
 TEAM_LOGOS['undisputedboyz']='data:image/webp;base64,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';
 TEAM_LOGOS['undisputed']=TEAM_LOGOS['undisputedboyz'];
@@ -1595,7 +1655,11 @@ function syncFromCloud(){
   if(!sbOn())return Promise.resolve(false);
   return sbFetchLeague().then(function(data){
     if(data&&data.divisions){
-      DB=data;normalizeDB();persist();renderAll();
+      DB=data;normalizeDB();
+      /* The cloud copy carries its own activeDivision — the URL still wins. */
+      if(typeof applyRouteDivision==='function')applyRouteDivision();
+      persist();renderAll();
+      if(typeof pageTitle==='function'&&currentRoute()!=='story')document.title=pageTitle(currentRoute());
       var am=document.getElementById('adminMain');
       if(am&&am.style.display!=='none'&&typeof renderAdmin==='function')renderAdmin();
       return true;
@@ -1707,7 +1771,7 @@ function renderMvp(){
   if(ids.length){picks=ids.map(function(id){return d.players.filter(function(p){return p.id===id;})[0];}).filter(Boolean);}
   else{picks=d.players.map(function(p){return {p:p,s:pstats(p.id)};}).filter(function(x){return x.s.gp>0;})
         .sort(function(a,b){return b.s.ppg-a.s.ppg;}).slice(0,5).map(function(x){return x.p;});}
-  if(!picks.length){el.innerHTML='<div class="mvp-empty">The MVP race appears once you rank players in the admin panel (Results tab), or once box scores are entered.</div>';return;}
+  if(!picks.length){el.innerHTML='<div class="mvp-empty"><b>MVP ladder posts after Week 1.</b> The race takes shape once the first box scores are in.</div>';return;}
   el.innerHTML=picks.map(function(p,i){
     var t=teamById(p.teamId)||{color:'#c8a04a',name:'',short:''}, s=pstats(p.id);
     var val=s.gp>0?(s.ppg.toFixed(1)+' PPG'):'';
@@ -1721,10 +1785,20 @@ function renderDivisionTabs(){
   var order=DB.meta.divOrder||Object.keys(DB.divisions), act=DB.meta.activeDivision;
   var html=order.map(function(id){var d=DB.divisions[id];if(!d)return '';return '<button data-div="'+id+'"'+(id===act?' class="active"':'')+'>'+esc(d.name)+'</button>';}).join('');
   document.querySelectorAll('[data-divtabs]').forEach(function(el){el.innerHTML=html;});
+  var actName=(DB.divisions[act]&&DB.divisions[act].name)||act||'';
+  document.querySelectorAll('[data-divlabel]').forEach(function(el){el.textContent='Viewing the '+actName;});
   var as=document.getElementById('admDivSel');
   if(as)as.innerHTML=order.map(function(id){var d=DB.divisions[id];if(!d)return '';return '<option value="'+id+'"'+(id===act?' selected':'')+'>'+esc(d.name)+'</option>';}).join('');
 }
-function setDivision(id){if(!DB.divisions[id])return;DB.meta.activeDivision=id;persist();renderAll();}
+function setDivision(id){
+  if(!DB.divisions[id])return;
+  /* On a division page the URL is the source of truth — navigate and let the router re-render. */
+  if(typeof DIV_ROUTES!=='undefined'){
+    var r=currentRoute();
+    if(DIV_ROUTES.indexOf(r)>=0&&currentDivision()!==id){location.hash='#/'+r+'/'+id;return;}
+  }
+  DB.meta.activeDivision=id;persist();renderAll();
+}
 var LEAD={key:'pts',dir:'desc',q:''};
 var LB_STATS=['pts','reb','ast','stl','blk','to'];
 function lbRows(){
@@ -1744,7 +1818,7 @@ function renderLeaderboard(){
     if(an===bn)return a.name.toLowerCase()<b.name.toLowerCase()?-1:1;
     return dir==='asc'?an-bn:bn-an;
   });
-  if(!rows.length){body.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:26px 12px">'+(q?'No players match your search.':'No players yet — add teams and players in the admin panel.')+'</td></tr>';}
+  if(!rows.length){body.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:26px 12px">'+(q?'No players match your search.':'Stats post after Week 1 — players appear here once box scores are in.')+'</td></tr>';}
   else{
     body.innerHTML=rows.map(function(r,i){
       function cell(key){return '<td class="'+(k===key?'lb-active':'')+'">'+r[key].toFixed(1)+'</td>';}
@@ -1785,7 +1859,7 @@ function setupLeaderboard(){
 function renderSchedule(){
   var el=document.getElementById('scheduleList');if(!el)return;
   var games=DIV().schedule.slice();
-  if(!games.length){el.innerHTML='<div class="sched-empty">No upcoming games are scheduled yet. Check back soon — the full slate posts here.</div>';return;}
+  if(!games.length){el.innerHTML='<div class="sched-empty"><b>The slate posts before Week 1.</b> Upcoming games appear here as soon as the schedule is confirmed.</div>';return;}
   var byWeek={};games.forEach(function(g){(byWeek[g.week]=byWeek[g.week]||[]).push(g);});
   var weeks=Object.keys(byWeek).sort(function(a,b){return a-b;});
   el.innerHTML=weeks.map(function(w){
@@ -1803,8 +1877,11 @@ function renderSchedule(){
 }
 function setTxt(id,t){var el=document.getElementById(id);if(el)el.textContent=t;}
 function nightsSummary(){
-  var parts=(DB.meta.divOrder||Object.keys(DB.divisions)).map(function(id){var d=DB.divisions[id];if(!d)return null;
-    return d.night+' ('+String(d.name).replace(/\s*Division$/i,'')+')';}).filter(Boolean);
+  /* "Invite: Tuesdays · Open: Wednesdays" — division first, so the two nights read clearly. */
+  var ids=(DB.meta.divOrder||Object.keys(DB.divisions)).slice()
+    .sort(function(a,b){return (a==='invite'?0:1)-(b==='invite'?0:1);});  /* Invite reads first */
+  var parts=ids.map(function(id){var d=DB.divisions[id];if(!d)return null;
+    return String(d.name).replace(/\s*Division$/i,'')+': '+d.night;}).filter(Boolean);
   return parts.join(' · ')||(DB.meta.night||'');
 }
 function renderContact(){
@@ -1812,8 +1889,8 @@ function renderContact(){
   setTxt('venVenue',m.venue);setTxt('venNight',nightsSummary());setTxt('venTime',m.time);
   setTxt('venAddress',m.address||'');setTxt('venPinVenue',m.venue||'');setTxt('venPinAddr',m.address||'');
   var vd=document.getElementById('venDirections');
-  if(vd){var q=[m.venue,m.address].filter(Boolean).join(', ');
-    if(q){vd.setAttribute('href','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q));vd.style.display='';}
+  if(vd){var q=(m.address||'').trim();   /* address only — Maps resolves it more reliably than venue name + address */
+    if(q){vd.setAttribute('href','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q).replace(/%20/g,'+'));vd.style.display='';}
     else{vd.style.display='none';}}
   setTxt('cVenue',m.venue);setTxt('cNight',nightsSummary());
   setTxt('cTime',(m.time||'')+' every week during the season.');
@@ -1989,7 +2066,9 @@ function renderSeason(){
   document.getElementById('seasonCards').innerHTML=cards.map(function(c,i){
     return '<div class="season-card reveal '+(i?'d'+i:'')+'"><div class="k">'+c.k+'</div><div class="big">'+c.big+'</div><div class="meta">'+c.meta+'</div></div>';
   }).join('');
-  document.getElementById('resultsList').innerHTML=DIV().results.map(function(r,i){
+  var _resEl=document.getElementById('resultsList');
+  if(!DIV().results.length){_resEl.innerHTML='<div class="sec-empty"><b>Results post after Week 1.</b> Final scores appear here the morning after each game night.</div>';}
+  else _resEl.innerHTML=DIV().results.map(function(r,i){
     var a=teamById(r.aId),b=teamById(r.bId);if(!a||!b)return '';
     return '<div class="matchup reveal '+(i?'d'+Math.min(i,3):'')+'">'+
       '<div class="team">'+crestHTML(a)+' '+a.name+'</div>'+
@@ -2004,11 +2083,14 @@ function renderSeason(){
       '<td class="diff '+(df>0?'pos':df<0?'neg':'')+'">'+fmtDiff(df)+'</td>'+
       '<td class="pct">'+((t.wins+t.losses)?(t.wins/(t.wins+t.losses)).toFixed(3):'—')+'</td></tr>';
   }).join('');
-  document.getElementById('standingsWrap').innerHTML='<table class="standings-table"><thead><tr><th>#</th><th>Team</th><th>Record</th><th title="Overall point differential">Diff</th><th>Win %</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  document.getElementById('standingsWrap').innerHTML = st.length
+    ? '<table class="standings-table"><thead><tr><th>#</th><th>Team</th><th>Record</th><th title="Overall point differential">Diff</th><th>Win %</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    : '<div class="sec-empty"><b>Standings post after Week 1.</b> Records and point differential appear here once the first results are in.</div>';
 }
 function renderTeams(){
   document.getElementById('teamsTitle').textContent=DIV().teams.length?(DIV().teams.length+' Squads. One Crown.'):'The Squads.';
   var st=sortedTeams();
+  if(!st.length){document.getElementById('teamsGrid').innerHTML='<div class="sec-empty" style="grid-column:1/-1"><b>Teams post before Week 1.</b> The '+esc(DIV().name)+' roster of squads appears here as soon as it is confirmed.</div>';return;}
   document.getElementById('teamsGrid').innerHTML=st.map(function(t,i){
     var roster=playersOf(t.id);
     var caps=roster.filter(function(p){return p.captain;});
@@ -2021,6 +2103,7 @@ function renderTeams(){
 }
 function renderRosters(){
   var st=sortedTeams();
+  if(!st.length){document.getElementById('rosterGrid').innerHTML='<div class="sec-empty" style="grid-column:1/-1"><b>Rosters post before Week 1.</b> Full '+esc(DIV().name)+' rosters appear here once teams are confirmed.</div>';return;}
   document.getElementById('rosterGrid').innerHTML=st.map(function(t,i){
     var roster=playersOf(t.id);
     var lis=roster.map(function(p){
@@ -2046,8 +2129,8 @@ function renderFeatured(){
     sub.textContent='Captains and standouts leading their rosters. Per-game averages appear here automatically once box scores are entered.';
   }
   if(!picks.length){
-    sub.textContent='Featured players appear here once rosters and box scores are added in the admin panel.';
-    document.getElementById('playerGrid').innerHTML='<div class="sched-empty" style="grid-column:1/-1">No players yet — add teams and rosters in the League Admin.</div>';
+    sub.textContent='Stats post after Week 1 — standout players appear here once box scores are in.';
+    document.getElementById('playerGrid').innerHTML='<div class="sched-empty" style="grid-column:1/-1">Stats post after Week 1 — featured players appear here once box scores are in.</div>';
     return;
   }
   document.getElementById('playerGrid').innerHTML=picks.map(function(x,i){
@@ -2102,18 +2185,60 @@ function revealActive(){
   pg.querySelectorAll('[data-count]').forEach(function(el){if(!el._counted){el._counted=1;countUp(el);}});
 }
 var ROUTES=['home','about','league','teams','schedule','media','rules','join','contact','story'];
+/* Routes that live as a separate page per division: #/league/open, #/teams/invite, … */
+var DIV_ROUTES=['league','teams','schedule'];
 function currentRoute(){var h=(location.hash||'').replace(/^#\/?/,'').split('/')[0];return ROUTES.indexOf(h)>=0?h:'home';}
+function defaultDivision(){
+  var m=(typeof DB!=='undefined'&&DB.meta)?DB.meta:{};
+  var d=m.activeDivision;
+  if(d&&DB.divisions&&DB.divisions[d])return d;
+  return (m.divOrder&&m.divOrder[0])||'open';
+}
+/* The division named in the URL, or null when the route has none. */
+function currentDivision(){
+  var parts=(location.hash||'').replace(/^#\/?/,'').split('/');
+  if(DIV_ROUTES.indexOf(parts[0])<0)return null;
+  var d=(parts[1]||'').toLowerCase();
+  return (d&&typeof DB!=='undefined'&&DB.divisions&&DB.divisions[d])?d:null;
+}
+/* Make the URL the source of truth for which division is showing. Returns true if it changed. */
+function applyRouteDivision(){
+  var d=currentDivision();
+  if(!d)return false;
+  if(DB.meta.activeDivision===d)return false;
+  DB.meta.activeDivision=d;persist();
+  return true;
+}
+function pageTitle(route){
+  var base='The Program Association — Where Koreatown Competes';
+  if(DIV_ROUTES.indexOf(route)<0)return base;
+  var d=DB.divisions&&DB.divisions[DB.meta.activeDivision];
+  if(!d)return base;
+  var label={league:'Standings & Stats',teams:'Teams',schedule:'Schedule'}[route];
+  return d.name+' — '+label+' · The Program Association';
+}
 function activatePage(route){
   var target=document.getElementById('page-'+route)||document.getElementById('page-home');
+  var dv=currentDivision();
   document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p===target);});
-  document.querySelectorAll('[data-route]').forEach(function(a){a.classList.toggle('active',a.getAttribute('data-route')===route);});
+  document.querySelectorAll('[data-route]').forEach(function(a){
+    var same=a.getAttribute('data-route')===route, dl=a.getAttribute('data-div-link');
+    a.classList.toggle('active',same&&(!dl||dl===dv));
+  });
   var mob=document.getElementById('mobileMenu');if(mob)mob.classList.remove('open');
   window.scrollTo(0,0);
   target.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
   target.querySelectorAll('[data-count]').forEach(function(el){el._counted=1;countUp(el);});
   document.getElementById('header').classList.toggle('scrolled',window.scrollY>40);
 }
-function router(){var r=currentRoute();activatePage(r);if(r==='story'){renderStory();}else{document.title='The Program Association — Where Koreatown Competes';}}
+function router(){
+  var r=currentRoute();
+  /* A bare #/league (or #/teams, #/schedule) resolves to a real division page. */
+  if(DIV_ROUTES.indexOf(r)>=0&&!currentDivision()){location.replace('#/'+r+'/'+defaultDivision());return;}
+  activatePage(r);
+  if(applyRouteDivision())renderAll();
+  if(r==='story'){renderStory();}else{document.title=pageTitle(r);}
+}
 window.addEventListener('hashchange',router);
 document.getElementById('year').textContent=new Date().getFullYear();
 window.addEventListener('scroll',function(){
@@ -2187,7 +2312,7 @@ function openTeam(id){
       '<div><div class="nm">'+esc(t.name)+'</div><div class="sub">'+ord(place)+' Place'+((t.losses===0&&t.wins>0)?' · Undefeated':'')+' · '+esc(capStr)+'</div></div>'+
       '<div class="tm-rec"><div class="w">'+t.wins+'–'+t.losses+'</div><div class="p">Record</div></div></div>'+
     '<table class="tm-table"><thead><tr><th>Player ('+roster.length+')</th><th>PPG</th><th>RPG</th><th>APG</th><th>STL</th><th>BLK</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-    (anyStats?'':'<div class="hint" style="margin-top:16px">Per-game averages appear here automatically once weekly box scores are entered in the admin panel.</div>');
+    (anyStats?'':'<div class="hint" style="margin-top:16px">Per-game averages post after Week 1.</div>');
   teamModal.classList.add('open');
 }
 
@@ -2207,7 +2332,10 @@ function openPlayer(pid){
   var K=['pts','reb','ast','stl','blk','to'], L=['PTS','REB','AST','STL','BLK','TO'];
   var best={}; K.forEach(function(k){ best[k]=logs.reduce(function(m,g){return Math.max(m,+g[k]||0);},0); });
 
-  var head='<div class="pl-head" style="--tc:'+team.color+'">'+
+  /* Back control so a visitor can return to the roster and pick another player. */
+  var back=(team&&team.id)?('<button type="button" class="pl-back" data-back-team="'+team.id+'">'+
+    '<span aria-hidden="true">←</span> Back to '+esc(team.name)+' roster</button>'):'';
+  var head=back+'<div class="pl-head" style="--tc:'+team.color+'">'+
     '<span class="pc'+(teamLogo(team)?' has-logo':'')+'">'+
       (teamLogo(team)?'<img src="'+teamLogo(team)+'" alt="">':esc(team.short||'')) +'</span>'+
     '<div><div class="nm">'+esc(pl.name)+'</div><div class="sub">'+esc(team.name)+
@@ -2215,7 +2343,7 @@ function openPlayer(pid){
 
   if(!logs.length){
     document.getElementById('playerModalBody').innerHTML=head+
-      '<div class="pl-empty">No games recorded yet. Box scores appear here as soon as they are entered in the admin panel.</div>';
+      '<div class="pl-empty">No games recorded yet — stats post after Week 1.</div>';
   } else {
     var avg='<div class="pl-avg">'+
       [['ppg','PPG'],['rpg','RPG'],['apg','APG'],['spg','SPG'],['bpg','BPG'],['topg','TO']]
@@ -2238,6 +2366,8 @@ function closePlayer(){var m=document.getElementById('playerModal');if(m)m.class
 
 document.addEventListener('click',function(e){var c=e.target.closest('.team-card[data-team]');if(c)openTeam(c.getAttribute('data-team'));});
 document.addEventListener('click',function(e){
+  var bk=e.target.closest('[data-back-team]');
+  if(bk){e.stopPropagation();closePlayer();openTeam(bk.getAttribute('data-back-team'));return;}
   var el=e.target.closest('[data-player]'); if(!el)return;
   e.stopPropagation(); openPlayer(el.getAttribute('data-player'));
 });
