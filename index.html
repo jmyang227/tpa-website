@@ -1792,12 +1792,14 @@ function renderDivisionTabs(){
 }
 function setDivision(id){
   if(!DB.divisions[id])return;
-  /* On a division page the URL is the source of truth — navigate and let the router re-render. */
+  /* Switch first, so anything that renders straight after this call (the admin panel does)
+     already sees the new division. Then move the URL to match — the router finds the
+     division unchanged and only repaints the nav. */
+  DB.meta.activeDivision=id;persist();renderAll();
   if(typeof DIV_ROUTES!=='undefined'){
     var r=currentRoute();
-    if(DIV_ROUTES.indexOf(r)>=0&&currentDivision()!==id){location.hash='#/'+r+'/'+id;return;}
+    if(DIV_ROUTES.indexOf(r)>=0&&currentDivision()!==id)location.hash='#/'+r+'/'+id;
   }
-  DB.meta.activeDivision=id;persist();renderAll();
 }
 var LEAD={key:'pts',dir:'desc',q:''};
 var LB_STATS=['pts','reb','ast','stl','blk','to'];
@@ -2236,7 +2238,12 @@ function router(){
   /* A bare #/league (or #/teams, #/schedule) resolves to a real division page. */
   if(DIV_ROUTES.indexOf(r)>=0&&!currentDivision()){location.replace('#/'+r+'/'+defaultDivision());return;}
   activatePage(r);
-  if(applyRouteDivision())renderAll();
+  if(applyRouteDivision()){
+    renderAll();
+    /* Keep an open admin panel on the same division as the page behind it. */
+    var am=document.getElementById('adminMain');
+    if(am&&am.style.display!=='none'&&typeof renderAdmin==='function')renderAdmin();
+  }
   if(r==='story'){renderStory();}else{document.title=pageTitle(r);}
 }
 window.addEventListener('hashchange',router);
