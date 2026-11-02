@@ -18,6 +18,38 @@
 <meta name="twitter:title" content="The Program Association — Where Koreatown Competes" />
 <meta name="twitter:description" content="Koreatown's premier adult basketball league. Live standings, rosters, and stats." />
 <meta name="twitter:image" content="https://tpaleague.com/og-image.png" />
+<meta property="og:site_name" content="The Program Association" />
+<meta property="og:locale" content="en_US" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="https://tpaleague.com/" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsOrganization",
+  "name": "The Program Association",
+  "alternateName": "TPA",
+  "sport": "Basketball",
+  "url": "https://tpaleague.com/",
+  "logo": "https://tpaleague.com/og-image.png",
+  "image": "https://tpaleague.com/og-image.png",
+  "description": "The Program Association is an adult basketball league in Koreatown, Los Angeles, running an invite-only Invite Division and an open-entry Open Division.",
+  "email": "info@tpaleague.com",
+  "sameAs": ["https://www.instagram.com/tpaleague/"],
+  "areaServed": { "@type": "City", "name": "Los Angeles", "containedInPlace": { "@type": "AdministrativeArea", "name": "California" } },
+  "location": {
+    "@type": "Place",
+    "name": "St. Sophia Greek Cathedral",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1324 S Normandie Ave",
+      "addressLocality": "Los Angeles",
+      "addressRegion": "CA",
+      "postalCode": "90006",
+      "addressCountry": "US"
+    }
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -470,6 +502,9 @@ textarea.inp{min-height:92px;resize:vertical;font-family:'Inter',sans-serif}
   transform:translateX(-50%) translateY(10px);transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s;
   box-shadow:0 22px 44px -18px rgba(0,0,0,.85);z-index:60}
 .nav-drop:hover .nav-drop-menu,.nav-drop:focus-within .nav-drop-menu{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+/* Once a division is chosen the menu gets out of the way, even though the pointer
+   is still sitting on the nav item. It reopens the next time the pointer arrives. */
+.nav-drop.picked .nav-drop-menu{opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-50%) translateY(10px)}
 .nav-links .nav-drop-menu a{padding:10px 20px;font-size:.72rem;letter-spacing:.14em;white-space:nowrap}
 .nav-links .nav-drop-menu a::after{display:none}
 .nav-links .nav-drop-menu a:hover{color:var(--gold-bright);background:rgba(200,160,74,.07)}
@@ -482,6 +517,114 @@ textarea.inp{min-height:92px;resize:vertical;font-family:'Inter',sans-serif}
   font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.7rem;color:var(--gold-bright)}
 .hero-div-tag::before{content:"";width:26px;height:1px;background:var(--gold);flex:none}
 @media(max-width:400px){.mobile-menu .mm-label{font-size:1.05rem}.mobile-menu .mm-group a{font-size:.74rem;padding:6px 11px}}
+/* ===================== HOME FRONT PAGE ===================== */
+/* Each band hides itself when it has no data, so the front page is never padded out with empty states. */
+section[hidden],.home-band[hidden]{display:none!important}
+.home-band{padding:84px 0}
+.home-band .sec-head{margin-bottom:34px;max-width:760px}
+.home-band .eyebrow{margin-bottom:14px}
+.home-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:30px}
+.home-head .sec-head{margin-bottom:0}
+.home-more{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.74rem;color:var(--gold);white-space:nowrap;display:inline-flex;align-items:center;gap:8px;padding-bottom:3px;border-bottom:1px solid rgba(200,160,74,.4);transition:.3s var(--ease)}
+.home-more:hover{color:var(--gold-bright);border-bottom-color:var(--gold-bright)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:860px){.duo{grid-template-columns:1fr;gap:18px}.home-band{padding:64px 0}}
+.dcard{background:var(--charcoal);border:1px solid var(--line);padding:24px;min-width:0}
+.dcard-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.dcard-div{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;color:var(--gold-bright)}
+.dcard-note{font-size:.72rem;color:var(--muted-2);text-transform:uppercase;letter-spacing:.1em;font-family:'Oswald',sans-serif;white-space:nowrap}
+/* This week */
+.slate-row{display:grid;grid-template-columns:62px 1fr;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line-2)}
+.slate-row:last-child{border-bottom:none;padding-bottom:0}
+.slate-time{font-family:'Oswald',sans-serif;font-weight:600;font-size:.76rem;letter-spacing:.06em;color:var(--gold);white-space:nowrap}
+.slate-match{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+.slate-side{display:inline-flex;align-items:center;gap:9px;min-width:0}
+/* ===================== REGISTRATION INFORMATION ===================== */
+.reg-banner{display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px;padding:13px 20px;
+  border:1px solid rgba(200,160,74,.45);background:rgba(200,160,74,.09);border-radius:2px}
+.reg-banner .rb-dot{width:8px;height:8px;border-radius:50%;background:var(--gold-bright);flex:none;box-shadow:0 0 0 4px rgba(200,160,74,.18)}
+.reg-banner .rb-txt{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--gold-bright)}
+.reg-banner.closed{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.04)}
+.reg-banner.closed .rb-dot{background:var(--muted-2);box-shadow:none}
+.reg-banner.closed .rb-txt{color:var(--muted)}
+.rd-line{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line-2)}
+.rd-line:last-child{border-bottom:none;padding-bottom:0}
+.rd-k{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.66rem;color:var(--muted-2)}
+.rd-v{font-family:'Oswald',sans-serif;font-weight:500;font-size:.92rem;text-align:right}
+.rd-v.tbd{color:var(--muted-2);font-weight:300}
+.fee-wrap{margin-top:22px;background:var(--charcoal);border:1px solid var(--line);padding:26px}
+.fee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:860px){.fee-grid{grid-template-columns:1fr;gap:18px}.fee-wrap{padding:20px}}
+.fee{display:flex;flex-direction:column;gap:7px;min-width:0}
+.fee-k{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.64rem;color:var(--gold)}
+.fee-v{font-family:'Anton',sans-serif;font-size:1.9rem;line-height:1;letter-spacing:.01em}
+.fee-v small{font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.1em;color:var(--muted);display:block;margin-top:7px;text-transform:uppercase}
+.fee-note{font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.55}
+.fee-foot{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+.fee-foot .fi{font-size:.9rem;color:var(--muted);font-weight:300}
+.fee-foot .fi b{color:var(--white);font-weight:500}
+.slate-match .crest{width:28px;height:28px;font-size:.6rem}
+.slate-team{font-family:'Oswald',sans-serif;font-weight:500;font-size:.9rem;letter-spacing:.02em}
+.slate-v{color:var(--muted-2);font-size:.7rem;font-family:'Oswald',sans-serif;letter-spacing:.14em;padding:0 2px}
+/* Results — the score is the loudest thing on the page */
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:980px){.res-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.res-grid{grid-template-columns:1fr}}
+.res{background:var(--charcoal);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.res-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.64rem;color:var(--muted-2)}
+.res-meta .rd{color:var(--gold)}
+.res-side{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center}
+.res-side .crest{width:28px;height:28px;font-size:.6rem}
+.res-name{font-family:'Oswald',sans-serif;font-weight:500;font-size:.92rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-score{font-family:'Anton',sans-serif;font-size:1.6rem;line-height:1;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.res-side.win .res-name{color:var(--white)}
+.res-side.win .res-score{color:var(--gold-bright)}
+/* Standings */
+.st-row{display:grid;grid-template-columns:20px 30px 1fr auto auto;gap:11px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line-2)}
+.st-row:last-child{border-bottom:none;padding-bottom:0}
+.st-pos{font-family:'Oswald',sans-serif;font-size:.74rem;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.st-row .crest{width:30px;height:30px;font-size:.62rem}
+.st-name{font-family:'Oswald',sans-serif;font-weight:500;font-size:.9rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-rec{font-family:'Oswald',sans-serif;font-size:.84rem;font-variant-numeric:tabular-nums;color:var(--white)}
+.st-diff{font-family:'Oswald',sans-serif;font-size:.74rem;font-variant-numeric:tabular-nums;color:var(--gold);min-width:3.1em;text-align:right}
+/* Player of the week — the one full-bleed photographic band */
+.home-potw{position:relative;min-height:440px;display:flex;align-items:flex-end;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.home-potw .pbg{position:absolute;inset:0;background-size:cover;background-position:center top;transform:scale(1.02)}
+.home-potw .pgrad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,.25) 0%,rgba(10,10,11,.72) 58%,rgba(10,10,11,.96) 100%)}
+.home-potw .wrap{position:relative;z-index:2;padding-top:90px;padding-bottom:52px;text-align:left}
+.potw-name{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(2rem,5.4vw,3.8rem);line-height:.96;letter-spacing:.01em;margin-top:6px}
+.potw-sub{color:var(--muted);font-size:.98rem;margin-top:14px;max-width:560px}
+@media(max-width:620px){.home-potw{min-height:360px}.home-potw .wrap{padding-top:70px;padding-bottom:40px}}
+/* Leaders */
+.ld-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line-2)}
+.ld-row:last-child{border-bottom:none;padding-bottom:0}
+.ld-who{display:flex;align-items:center;gap:10px;min-width:0}
+.ld-who .crest{width:28px;height:28px;font-size:.58rem}
+.ld-txt{min-width:0}
+.ld-cat{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.6rem;color:var(--muted-2)}
+.ld-name{font-family:'Oswald',sans-serif;font-weight:500;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ld-val{font-family:'Anton',sans-serif;font-size:1.15rem;color:var(--gold-bright);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ld-val small{font-family:'Oswald',sans-serif;font-size:.56rem;letter-spacing:.12em;color:var(--muted-2);display:block;text-align:right;margin-top:1px}
+/* Stories teaser */
+.hs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:860px){.hs-grid{grid-template-columns:1fr}}
+.hs{background:var(--charcoal);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;transition:.4s var(--ease)}
+.hs:hover{border-color:rgba(200,160,74,.4);transform:translateY(-3px)}
+.hs-img{aspect-ratio:16/10;max-width:100%;background:var(--charcoal-2) center/cover no-repeat;border-bottom:1px solid var(--line)}
+.hs-body{padding:18px;display:flex;flex-direction:column;gap:9px}
+.hs-cat{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.6rem;color:var(--gold)}
+.hs-title{font-family:'Oswald',sans-serif;font-weight:500;font-size:1.02rem;line-height:1.25}
+.hs-ex{font-size:.88rem;color:var(--muted);font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* Schedule matchups on a phone: two team names, a crest each, VS and a fixed-width
+   date column do not fit on one line, which pushed the whole page sideways once a
+   slate was published. Stack the date underneath and let the names shrink. */
+@media(max-width:560px){
+  .matchup{flex-wrap:wrap;padding:14px 16px;gap:6px}
+  .team{flex:1 1 0;min-width:0;font-size:.8rem;gap:8px;letter-spacing:.03em;line-height:1.25}
+  .team .crest{width:26px;height:26px;font-size:.55rem}
+  .vs{padding:0 6px;font-size:.74rem;flex:0 0 auto}
+  .when{order:3;width:100%;text-align:center;border-top:1px solid var(--line-2);padding-top:9px;margin-top:3px}
+}
 .page-hero{padding:150px 0 66px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;background:linear-gradient(180deg,var(--black) 0%,var(--charcoal) 100%)}
 .page-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 130% at 82% 0%,rgba(200,160,74,.13),transparent 55%);pointer-events:none}
 .page-hero .wrap{position:relative;z-index:2}
@@ -721,6 +864,56 @@ html.intro-play{overflow:hidden}
 /* Decide before first paint: returning-this-session or reduced-motion users skip the intro entirely (no flash). */
 (function(){try{
   var skip=false;
+  /* ---- Deep links that survive having the #fragment stripped ----
+     Instagram bio links, link-in-bio tools and some QR generators drop everything
+     after the "#", so a plain tpaleague.com/#/join lands on the homepage. These
+     forms carry the destination in the path or query instead, and are rewritten
+     back into a normal hash route before the router boots.
+       /join  /register  /apply        → Join page   (needs the SPA rule in _redirects)
+       /?p=join  /?page=join           → Join page   (works with no Netlify setup)
+       /?reg=freeagent|team|volunteer  → Join page with that form already open
+     An arrival through any of these also skips the intro animation, so someone
+     tapping "Apply to join" reaches the form immediately. */
+  var ALIAS={join:'join',register:'join',registration:'join',apply:'join',signup:'join','sign-up':'join',
+             about:'about',league:'league',teams:'teams',schedule:'schedule',media:'media',rules:'rules',contact:'contact'};
+  var REGALIAS={freeagent:'freeagent','free-agent':'freeagent',solo:'freeagent',player:'freeagent',
+                team:'team',volunteer:'volunteer',staff:'volunteer'};
+  var OPENSREG={register:1,registration:1,apply:1,signup:1,'sign-up':1};
+  var qs={};
+  (location.search||'').replace(/^\?/,'').split('&').forEach(function(kv){
+    if(!kv)return;var i=kv.indexOf('=');var k=(i<0?kv:kv.slice(0,i)).toLowerCase();
+    qs[k]=decodeURIComponent((i<0?'':kv.slice(i+1)).replace(/\+/g,' ')).toLowerCase();
+  });
+  var seg=(location.pathname||'').toLowerCase().replace(/\.html?$/,'').split('/').filter(Boolean);
+  var want=qs.p||qs.page||'';
+  var reg=REGALIAS[qs.reg||qs.register||qs.form||'']||'';
+  var DIVPAGE={league:1,teams:1,schedule:1};
+  var sub='';
+  if(!want){for(var i=seg.length-1;i>=0;i--){if(ALIAS[seg[i]]){want=seg[i];sub=seg[i+1]||'';break;}}}
+  if(!want&&reg)want='register';
+  /* /league/open and /teams/invite are real crawlable URLs, so carry the division
+     through. The router validates it and falls back if it is not a real division. */
+  var dsub=(qs.d||qs.div||sub||'').replace(/[^a-z0-9_-]/g,'');
+  if(want&&ALIAS[want]){
+    if(OPENSREG[want]&&!reg)reg='freeagent';
+    if(reg)window.__tpaOpenReg=reg;
+    var h=(location.hash||'').replace(/^#\/?/,'');
+    if(!h){
+      var target='#/'+ALIAS[want]+((DIVPAGE[ALIAS[want]]&&dsub)?('/'+dsub):'');
+      /* Normalise to the site's own canonical URL so anyone who copies it out of the
+         address bar gets a clean link. replaceState keeps the Back button pointing at
+         wherever they came from, and never reloads. */
+      try{
+        if(window.history&&history.replaceState){
+          history.replaceState(null,'',/^https?:/.test(location.protocol)?(location.origin+'/'+target):target);
+        }else{location.hash=target;}
+      }catch(e){location.hash=target;}
+    }
+    skip=true;
+  }
+  /* Once per visitor, not once per session: a returning player no longer waits
+     4.2s for the intro every time they reopen the site. */
+  try{if(localStorage.getItem('tpa_intro_seen'))skip=true;}catch(e){}
   try{if(sessionStorage.getItem('tpa_intro_seen'))skip=true;}catch(e){}
   try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)skip=true;}catch(e){}
   var c=document.documentElement;
@@ -824,6 +1017,87 @@ html.intro-play{overflow:hidden}
 
 <section class="stats"><div class="stats-grid" id="statsBand"></div></section>
 
+<!-- ---------- THIS WEEK ---------- -->
+<section class="home-band" id="homeWeekBand" hidden>
+  <div class="wrap">
+    <div class="home-head">
+      <div class="sec-head">
+        <span class="eyebrow reveal">This Week</span>
+        <h2 class="reveal d1">Next Up.</h2>
+      </div>
+      <a href="#/schedule" class="home-more reveal d1">Full schedule <span class="arrow">→</span></a>
+    </div>
+    <div class="duo" id="homeWeek"></div>
+  </div>
+</section>
+
+<!-- ---------- LATEST RESULTS ---------- -->
+<section class="home-band" id="homeResultsBand" hidden>
+  <div class="wrap">
+    <div class="home-head">
+      <div class="sec-head">
+        <span class="eyebrow reveal">Final</span>
+        <h2 class="reveal d1">Latest Results.</h2>
+      </div>
+      <a href="#/schedule" class="home-more reveal d1">All results <span class="arrow">→</span></a>
+    </div>
+    <div class="res-grid" id="homeResults"></div>
+  </div>
+</section>
+
+<!-- ---------- STANDINGS ---------- -->
+<section class="home-band" id="homeStandingsBand" hidden>
+  <div class="wrap">
+    <div class="home-head">
+      <div class="sec-head">
+        <span class="eyebrow reveal">Where It Stands</span>
+        <h2 class="reveal d1">Standings.</h2>
+      </div>
+      <a href="#/league" class="home-more reveal d1">Full standings <span class="arrow">→</span></a>
+    </div>
+    <div class="duo" id="homeStandings"></div>
+  </div>
+</section>
+
+<!-- ---------- PLAYER OF THE WEEK ---------- -->
+<section class="home-potw" id="homePotwBand" hidden>
+  <div class="pbg" id="homePotwBg"></div>
+  <div class="pgrad"></div>
+  <div class="wrap">
+    <span class="eyebrow reveal">Player of the Week</span>
+    <div class="potw-name reveal d1" id="homePotwName"></div>
+    <p class="potw-sub reveal d2" id="homePotwSub"></p>
+  </div>
+</section>
+
+<!-- ---------- STATISTICAL LEADERS ---------- -->
+<section class="home-band" id="homeLeadersBand" hidden>
+  <div class="wrap">
+    <div class="home-head">
+      <div class="sec-head">
+        <span class="eyebrow reveal">Statistical Leaders</span>
+        <h2 class="reveal d1">Leading The League.</h2>
+      </div>
+      <a href="#/league" class="home-more reveal d1">Full leaderboards <span class="arrow">→</span></a>
+    </div>
+    <div class="duo" id="homeLeaders"></div>
+  </div>
+</section>
+
+<!-- ---------- COMMUNITY STORIES ---------- -->
+<section class="home-band" id="homeStoriesBand" hidden>
+  <div class="wrap">
+    <div class="home-head">
+      <div class="sec-head">
+        <span class="eyebrow reveal">Stories of Koreatown</span>
+        <h2 class="reveal d1">Beyond The Court.</h2>
+      </div>
+      <a href="#/media" class="home-more reveal d1">All stories <span class="arrow">→</span></a>
+    </div>
+    <div class="hs-grid" id="homeStories"></div>
+  </div>
+</section>
+
 <section class="section-pad">
   <div class="wrap">
     <div class="sec-head">
@@ -847,6 +1121,7 @@ html.intro-play{overflow:hidden}
     <span class="eyebrow reveal">Join The Program</span>
     <h2 class="reveal d1">Ready To Compete?</h2>
     <p class="reveal d2">Bring a full roster or sign up solo — there's a place for you on the court.</p>
+    <p class="reveal d2" id="homeRegLine" style="font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;color:var(--gold-bright);margin-top:14px" hidden></p>
     <a href="#/join" class="btn btn-gold reveal d3">Register Now <span class="arrow">→</span></a>
   </div>
 </section>
@@ -1221,8 +1496,20 @@ html.intro-play{overflow:hidden}
     <span class="eyebrow reveal">Join The Program</span>
     <h1 class="reveal d1">Get In The <span class="lite">Game.</span></h1>
     <p class="reveal d2">Whether you bring a full roster or roll solo, there's a place for you in TPA. Pick a path below and we'll be in touch.</p>
+    <div class="reg-banner reveal d2" id="regBanner" hidden></div>
   </div>
 </header>
+
+<section class="section-pad" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:30px">
+      <span class="eyebrow reveal">Before You Sign Up</span>
+      <h2 class="reveal d1">Dates &amp; Fees.</h2>
+    </div>
+    <div class="duo" id="regDivisions"></div>
+    <div class="fee-wrap reveal" id="regFees"></div>
+  </div>
+</section>
 
 <section class="section-pad">
   <div class="wrap">
@@ -1386,8 +1673,10 @@ function divBundle(name,seedTeams,results,schedule,gotw,night){
     results:results||[],schedule:schedule||[],gotw:gotw||{aId:'',bId:'',date:'',note:''},mvp:[]};
 }
 var SEED={
-  meta:{season:'Season 5',title:'Gratitude',venue:'St. Sophia Greek Cathedral',address:'1324 S Normandie Ave, Los Angeles, CA 90006',night:'Tuesdays',time:'7:00 – 10:00 PM',
-        seasonsPlayed:5,champions:4,week:5,pin:'5130',
+  meta:{season:'Season 1',title:'The Introduction',venue:'St. Sophia Greek Cathedral',address:'1324 S Normandie Ave, Los Angeles, CA 90006',night:'Tuesdays',time:'7:00 – 10:00 PM',
+        seasonsPlayed:1,champions:0,week:1,pin:'5130',
+        regOpen:true,regSeason:'Season 2',regDeadline:'2026-12-18',
+        teamFee:'$1,000',refFee:'$45',feeIncludes:'Games, stats, highlights and table fees',
         leagueEmail:'info@tpaleague.com',web3key:'',statsSheet:'',
         activeDivision:'open',divOrder:['open','invite']},
   divisions:{
@@ -1428,6 +1717,25 @@ function normalizeDB(){ // fill in newer fields + migrate older saves
       DB.media.potwList=[{photo:DB.media.potw,name:DB.media.potwName||''}];
   }
   if(DB.media&&DB.media.tiles&&DB.media.tiles.live&&DB.media.tiles.live.title==='Tuesday Live')DB.media.tiles.live.title='LiveStream';
+  /* The league is in its first season. The original build shipped with placeholder
+     history (Season 5 · "Gratitude", 5 seasons played, 4 champions) which overstated
+     it everywhere the stat band and season headline appear. Correct only those exact
+     placeholder values, so a real edit later is never overwritten. */
+  if(DB.meta){
+    if(DB.meta.season==='Season 5')DB.meta.season='Season 1';
+    if(DB.meta.title==='Gratitude')DB.meta.title='The Introduction';
+    if(DB.meta.seasonsPlayed===5)DB.meta.seasonsPlayed=1;
+    if(DB.meta.champions===4)DB.meta.champions=0;
+  }
+  /* Registration details, editable in Admin → Settings. */
+  if(DB.meta){
+    if(typeof DB.meta.regOpen!=='boolean')DB.meta.regOpen=true;
+    if(!DB.meta.regSeason)DB.meta.regSeason='Season 2';
+    if(!DB.meta.regDeadline)DB.meta.regDeadline='2026-12-18';
+    if(!DB.meta.teamFee)DB.meta.teamFee='$1,000';
+    if(!DB.meta.refFee)DB.meta.refFee='$45';
+    if(!DB.meta.feeIncludes)DB.meta.feeIncludes='Games, stats, highlights and table fees';
+  }
   DB.meta=Object.assign({leagueEmail:'info@tpaleague.com',web3key:''},DB.meta);
   // Migrate flat (single-league) saves into the divisions model
   if(!DB.divisions){
@@ -1444,6 +1752,7 @@ function normalizeDB(){ // fill in newer fields + migrate older saves
   Object.keys(DB.divisions).forEach(function(id){var d=DB.divisions[id];
     d.teams=d.teams||[];d.players=d.players||[];d.games=d.games||[];d.results=d.results||[];d.schedule=d.schedule||[];
     d.gotw=d.gotw||{aId:'',bId:'',date:'',note:''};if(!d.mvp)d.mvp=[];if(!d.name)d.name=id;
+    if(typeof d.startDate!=='string')d.startDate=(id==='invite'?'2027-01-05':(id==='open'?'2027-01-06':''));
     if(!d.night)d.night=(id==='invite'?'Tuesdays':(id==='open'?'Wednesdays':(DB.meta&&DB.meta.night)||'Tuesdays'));
     if(DB.meta.divOrder.indexOf(id)<0)DB.meta.divOrder.push(id);});
   if(!DB.divisions[DB.meta.activeDivision])DB.meta.activeDivision=DB.meta.divOrder[0];
@@ -1659,7 +1968,7 @@ function syncFromCloud(){
       /* The cloud copy carries its own activeDivision — the URL still wins. */
       if(typeof applyRouteDivision==='function')applyRouteDivision();
       persist();renderAll();
-      if(typeof pageTitle==='function'&&currentRoute()!=='story')document.title=pageTitle(currentRoute());
+      if(typeof applyMeta==='function')applyMeta(currentRoute());
       var am=document.getElementById('adminMain');
       if(am&&am.style.display!=='none'&&typeof renderAdmin==='function')renderAdmin();
       return true;
@@ -1763,7 +2072,7 @@ function initials(name){var w=name.trim().split(/\s+/);return (w[0][0]+(w[1]?w[1
 function ord(n){var s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
 
 /* ================= RENDER ================= */
-function renderAll(){renderDivisionTabs();renderStats();renderSeason();renderSchedule();renderTeams();renderRosters();renderFeatured();renderLeaders();renderMvp();renderLeaderboard();renderMedia();renderNews();renderContact();revealActive();if(typeof currentRoute==='function'&&currentRoute()==='story')renderStory();}
+function renderAll(){renderDivisionTabs();renderStats();renderHome();renderRegistration();renderSeason();renderSchedule();renderTeams();renderRosters();renderFeatured();renderLeaders();renderMvp();renderLeaderboard();renderMedia();renderNews();renderContact();revealActive();if(typeof currentRoute==='function'&&currentRoute()==='story')renderStory();}
 function renderMvp(){
   var el=document.getElementById('mvpLadder');if(!el)return;
   var d=DIV(), picks=[];
@@ -1781,6 +2090,252 @@ function renderMvp(){
       '<div class="val">'+val+'</div></div>';
   }).join('');
 }
+/* ===================== HOME FRONT PAGE =====================
+   The homepage is not division-scoped, so these builders read both divisions.
+   Every helper below (sortedTeams, teamById, pstats, leader…) reads the active
+   division, so withDiv borrows it briefly and always puts it back. Nothing is
+   persisted and nothing re-renders, so this is invisible to the rest of the app. */
+function withDiv(id,fn){
+  var prev=DB.meta.activeDivision;
+  DB.meta.activeDivision=id;
+  try{return fn();}finally{DB.meta.activeDivision=prev;}
+}
+function divIds(){return (DB.meta.divOrder||Object.keys(DB.divisions)).filter(function(id){return !!DB.divisions[id];});}
+/* Tip-off times sort by the clock, not alphabetically: a plain string compare puts
+   "10:00 PM" ahead of "7:00 PM". Anything unparseable sorts last rather than breaking. */
+function timeMin(t){
+  var m=String(t||'').trim().match(/^(\d{1,2})(?::(\d{2}))?\s*([AaPp])?\.?[Mm]?\.?$/);
+  if(!m)return 1e9;
+  var h=+m[1], mi=+(m[2]||0), ap=(m[3]||'').toLowerCase();
+  if(ap==='p'&&h<12)h+=12;
+  if(ap==='a'&&h===12)h=0;
+  return h*60+mi;
+}
+function shortDate(d){
+  if(!d)return '';
+  var dt=new Date(String(d)+'T00:00:00');
+  if(isNaN(dt))return String(d);
+  return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+/* The next slate per division: the earliest upcoming week, or the earliest week on file. */
+function homeSlate(divId){
+  return withDiv(divId,function(){
+    var sch=(DIV().schedule||[]).slice();
+    if(!sch.length)return null;
+    var today=new Date();today.setHours(0,0,0,0);
+    var upcoming=sch.filter(function(g){
+      if(!g.date)return false;
+      var dt=new Date(String(g.date)+'T00:00:00');
+      return !isNaN(dt)&&dt>=today;
+    });
+    var pool=upcoming.length?upcoming:sch;
+    var wk=null;
+    pool.forEach(function(g){var w=+g.week||0;if(wk===null||w<wk)wk=w;});
+    var games=pool.filter(function(g){return (+g.week||0)===wk;})
+      .sort(function(a,b){return timeMin(a.time)-timeMin(b.time);})
+      .map(function(g){
+        var a=teamById(g.aId),b=teamById(g.bId);
+        return (a&&b)?{a:a,b:b,time:g.time||'',date:g.date||''}:null;
+      }).filter(Boolean);
+    return games.length?{week:wk,date:games[0].date,games:games}:null;
+  });
+}
+function homeResults(limit){
+  var out=[];
+  divIds().forEach(function(id){
+    withDiv(id,function(){
+      (DIV().results||[]).forEach(function(r){
+        var a=teamById(r.aId),b=teamById(r.bId);
+        if(!a||!b)return;  /* a result pointing at a deleted team is skipped, not fatal */
+        out.push({divName:DB.divisions[id].name,week:+r.week||0,date:r.date||'',
+                  a:a,b:b,aS:+r.aS||0,bS:+r.bS||0});
+      });
+    });
+  });
+  out.sort(function(x,y){
+    if(y.week!==x.week)return y.week-x.week;
+    return String(y.date).localeCompare(String(x.date));
+  });
+  return out.slice(0,limit||6);
+}
+function renderHome(){
+  var LD=[{k:'ppg',c:'Points'},{k:'rpg',c:'Rebounds'},{k:'apg',c:'Assists'},
+          {k:'spg',c:'Steals'},{k:'bpg',c:'Blocks'},{k:'topg',c:'Turnovers'}];
+  var ids=divIds();
+
+  /* ---- This week ---- */
+  var weekHTML=ids.map(function(id){
+    var s=homeSlate(id);if(!s)return '';
+    var rows=s.games.map(function(g){
+      /* Each crest stays welded to its own team name, so a wrap on a narrow phone
+         never leaves a logo stranded at the end of the line above. */
+      function side(t){return '<span class="slate-side">'+crestHTML(t)+'<span class="slate-team">'+esc(t.name)+'</span></span>';}
+      return '<div class="slate-row"><div class="slate-time">'+esc(g.time||'TBD')+'</div>'+
+        '<div class="slate-match">'+side(g.a)+'<span class="slate-v">vs</span>'+side(g.b)+'</div></div>';
+    }).join('');
+    var note=[s.week?('Week '+s.week):'',shortDate(s.date)].filter(Boolean).join(' · ');
+    return '<div class="dcard reveal"><div class="dcard-top"><span class="dcard-div">'+esc(DB.divisions[id].name)+'</span>'+
+      '<span class="dcard-note">'+esc(note)+'</span></div>'+rows+'</div>';
+  }).filter(Boolean).join('');
+  setHTML('homeWeek',weekHTML);show('homeWeekBand',!!weekHTML);
+
+  /* ---- Latest results ---- */
+  var rs=homeResults(6);
+  setHTML('homeResults',rs.map(function(r){
+    function side(t,sc,win){
+      return '<div class="res-side'+(win?' win':'')+'">'+crestHTML(t)+
+        '<span class="res-name">'+esc(t.name)+'</span><span class="res-score">'+sc+'</span></div>';
+    }
+    var meta=[r.week?('Week '+r.week):'',shortDate(r.date)].filter(Boolean).join(' · ');
+    return '<div class="res reveal"><div class="res-meta"><span class="rd">'+esc(r.divName)+'</span><span>'+esc(meta)+'</span></div>'+
+      side(r.a,r.aS,r.aS>r.bS)+side(r.b,r.bS,r.bS>r.aS)+'</div>';
+  }).join(''));
+  show('homeResultsBand',rs.length>0);
+
+  /* ---- Standings: top four per division, once a division has played ---- */
+  var stHTML=ids.map(function(id){
+    var rows=withDiv(id,function(){
+      var ts=sortedTeams();
+      if(!ts.length||!ts.some(function(t){return (t.wins+t.losses)>0;}))return '';
+      return ts.slice(0,4).map(function(t,i){
+        return '<div class="st-row"><span class="st-pos">'+(i+1)+'</span>'+crestHTML(t)+
+          '<span class="st-name">'+esc(t.name)+'</span>'+
+          '<span class="st-rec">'+t.wins+'–'+t.losses+'</span>'+
+          '<span class="st-diff">'+fmtDiff(teamDiff(t.id))+'</span></div>';
+      }).join('');
+    });
+    if(!rows)return '';
+    return '<div class="dcard reveal"><div class="dcard-top"><span class="dcard-div">'+esc(DB.divisions[id].name)+'</span>'+
+      '<span class="dcard-note">W–L · Diff</span></div>'+rows+'</div>';
+  }).filter(Boolean).join('');
+  setHTML('homeStandings',stHTML);show('homeStandingsBand',!!stHTML);
+
+  /* ---- Player of the Week ---- */
+  var pl=((DB.media&&DB.media.potwList)||[]).filter(function(e){return e&&(e.name||e.photo);});
+  var names=pl.map(function(e){return (e.name||'').trim();}).filter(Boolean);
+  var photo=(pl.filter(function(e){return e.photo;})[0]||{}).photo||'';
+  if(names.length||photo){
+    var bg=document.getElementById('homePotwBg');
+    if(bg)bg.style.backgroundImage=photo?bgUrl(photo):'';
+    setTxt('homePotwName',names.length?names.join(' · '):'Player of the Week');
+    /* Where the honouree is also on a roster, show their real season line — never a made-up one. */
+    var sub='';
+    if(names.length===1){
+      ids.some(function(id){
+        return withDiv(id,function(){
+          var p=(DIV().players||[]).filter(function(x){return x.name&&x.name.toLowerCase()===names[0].toLowerCase();})[0];
+          if(!p)return false;
+          var st=pstats(p.id),tm=teamById(p.teamId);
+          sub=[DB.divisions[id].name,tm?tm.name:'',st.gp?(st.ppg.toFixed(1)+' PPG · '+st.rpg.toFixed(1)+' RPG · '+st.apg.toFixed(1)+' APG'):'']
+                .filter(Boolean).join(' · ');
+          return true;
+        });
+      });
+    }
+    setTxt('homePotwSub',sub);
+    show('homePotwBand',true);
+  }else{show('homePotwBand',false);}
+
+  /* ---- Statistical leaders, all six categories, per division ---- */
+  var ldHTML=ids.map(function(id){
+    var rows=withDiv(id,function(){
+      return LD.map(function(c){
+        var L=leader(c.k);if(!L)return '';
+        var tm=teamById(L.p.teamId)||{name:'',short:'',color:'#c8a04a'};
+        return '<div class="ld-row"><div class="ld-who">'+crestHTML(tm)+
+          '<div class="ld-txt"><div class="ld-cat">'+c.c+'</div><div class="ld-name">'+esc(L.p.name)+'</div></div></div>'+
+          '<div class="ld-val">'+L.s[c.k].toFixed(1)+'<small>PER GAME</small></div></div>';
+      }).join('');
+    });
+    if(!rows)return '';
+    return '<div class="dcard reveal"><div class="dcard-top"><span class="dcard-div">'+esc(DB.divisions[id].name)+'</span>'+
+      '<span class="dcard-note">Min. '+MIN_GP+' games</span></div>'+rows+'</div>';
+  }).filter(Boolean).join('');
+  setHTML('homeLeaders',ldHTML);show('homeLeadersBand',!!ldHTML);
+
+  /* ---- Community stories ---- */
+  var news=(DB.news||[]).filter(function(n){return n&&n.published!==false;})
+    .slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));}).slice(0,3);
+  setHTML('homeStories',news.map(function(n){
+    var img=n.image?'<div class="hs-img" style="background-image:'+bgUrl(n.image)+'"></div>':'';
+    return '<a class="hs reveal" href="#/story/'+encodeURIComponent(n.id)+'">'+img+
+      '<div class="hs-body"><span class="hs-cat">'+esc(n.category||'Community')+'</span>'+
+      '<span class="hs-title">'+esc(n.title||'')+'</span>'+
+      (n.excerpt?'<span class="hs-ex">'+esc(n.excerpt)+'</span>':'')+'</div></a>';
+  }).join(''));
+  show('homeStoriesBand',news.length>0);
+}
+/* ===================== REGISTRATION INFORMATION =====================
+   Everything here comes from Admin → Settings, so next season is a form edit
+   rather than a code change. Anything left blank is shown as "TBA" instead of
+   being guessed at. */
+function longDate(d){
+  if(!d)return '';
+  var dt=new Date(String(d)+'T00:00:00');
+  if(isNaN(dt))return String(d);
+  return dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+}
+function renderRegistration(){
+  var m=DB.meta||{};
+  /* Status banner */
+  var ban=document.getElementById('regBanner');
+  if(ban){
+    var dl=longDate(m.regDeadline);
+    if(m.regOpen){
+      ban.className='reg-banner reveal d2 in';
+      ban.innerHTML='<span class="rb-dot"></span><span class="rb-txt">'+
+        esc(m.regSeason||'Next season')+' registration is open'+(dl?(' · Deadline '+esc(dl)):'')+'</span>';
+    }else{
+      ban.className='reg-banner closed reveal d2 in';
+      ban.innerHTML='<span class="rb-dot"></span><span class="rb-txt">'+
+        esc(m.regSeason||'Next season')+' registration is not open yet — join the list and we’ll let you know</span>';
+    }
+    ban.hidden=false;
+  }
+  /* The same deadline, on the homepage's closing call to action */
+  var hl=document.getElementById('homeRegLine');
+  if(hl){
+    var hd=longDate(m.regDeadline);
+    if(m.regOpen&&hd){hl.textContent=(m.regSeason||'Registration')+' closes '+hd;hl.hidden=false;}
+    else{hl.hidden=true;}
+  }
+  /* Per-division dates */
+  var ids=divIds();
+  setHTML('regDivisions',ids.map(function(id){
+    var d=DB.divisions[id];
+    var start=longDate(d.startDate);
+    var rows=[
+      {k:'Season',v:esc(m.regSeason||'—'),tbd:false},
+      {k:'First game',v:start?esc(start):'TBA',tbd:!start},
+      {k:'Game night',v:esc(d.night||'TBA'),tbd:!d.night},
+      {k:'Tip-off',v:esc(m.time||'TBA'),tbd:!m.time},
+      {k:'Season ends',v:'TBA',tbd:true}
+    ].map(function(r){
+      return '<div class="rd-line"><span class="rd-k">'+r.k+'</span><span class="rd-v'+(r.tbd?' tbd':'')+'">'+r.v+'</span></div>';
+    }).join('');
+    return '<div class="dcard reveal"><div class="dcard-top"><span class="dcard-div">'+esc(d.name)+'</span>'+
+      '<span class="dcard-note">'+(id==='invite'?'By invitation':'Open entry')+'</span></div>'+rows+'</div>';
+  }).join(''));
+  /* Fees */
+  var fees=document.getElementById('regFees');
+  if(fees){
+    fees.innerHTML=
+      '<div class="fee-grid">'+
+        '<div class="fee"><span class="fee-k">Team fee</span><span class="fee-v">'+esc(m.teamFee||'TBA')+'<small>Per team, per season</small></span>'+
+          '<span class="fee-note">The same in both divisions. Covers the league fee for the whole season.</span></div>'+
+        '<div class="fee"><span class="fee-k">Referee fees</span><span class="fee-v">'+esc(m.refFee||'TBA')+'<small>Per team, per game</small></span>'+
+          '<span class="fee-note">Charged on top of the team fee, for each game your team plays.</span></div>'+
+        '<div class="fee"><span class="fee-k">Free agents</span><span class="fee-v">Split<small>Of the team fee</small></span>'+
+          '<span class="fee-note">Once you are placed on a roster, the '+esc(m.teamFee||'team fee')+' is divided across that team’s players — so a ten-man roster works out at about a tenth each.</span></div>'+
+      '</div>'+
+      '<div class="fee-foot">'+
+        '<span class="fi"><b>What the league fee covers:</b> '+esc(m.feeIncludes||'—')+'.</span>'+
+        '<span class="fi">Referee fees are separate from the league fee. Questions about payment? <a class="gold" href="#/contact">Get in touch</a> before you register.</span>'+
+      '</div>';
+  }
+}
+function setHTML(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html;}
+function show(id,on){var el=document.getElementById(id);if(el)el.hidden=!on;}
 function renderDivisionTabs(){
   var order=DB.meta.divOrder||Object.keys(DB.divisions), act=DB.meta.activeDivision;
   var html=order.map(function(id){var d=DB.divisions[id];if(!d)return '';return '<button data-div="'+id+'"'+(id===act?' class="active"':'')+'>'+esc(d.name)+'</button>';}).join('');
@@ -1865,7 +2420,7 @@ function renderSchedule(){
   var byWeek={};games.forEach(function(g){(byWeek[g.week]=byWeek[g.week]||[]).push(g);});
   var weeks=Object.keys(byWeek).sort(function(a,b){return a-b;});
   el.innerHTML=weeks.map(function(w){
-    var list=byWeek[w].slice().sort(function(a,b){return String(a.time||'').localeCompare(String(b.time||''));});
+    var list=byWeek[w].slice().sort(function(a,b){return timeMin(a.time)-timeMin(b.time);});
     var rows=list.map(function(g,i){
       var a=teamById(g.aId),b=teamById(g.bId);if(!a||!b)return '';
       return '<div class="matchup reveal '+(i?'d'+Math.min(i,3):'')+'">'+
@@ -1998,6 +2553,15 @@ function renderStory(){
     '<div class="article-body">'+paras+'</div>'+
     '<div class="article-foot"><a class="btn btn-ghost" href="#/media">← More Koreatown Stories</a> <a class="btn btn-gold" href="#/media">Subscribe to Newsletter</a></div>';
   document.title='Stories of Koreatown — '+(a.title||'');
+  /* Give the individual story its own description and canonical URL too. */
+  if(typeof setMetaTag==='function'){
+    var sd=String(a.excerpt||'').slice(0,300);
+    if(sd){setMetaTag('meta[name="description"]',sd);setMetaTag('meta[property="og:description"]',sd);setMetaTag('meta[name="twitter:description"]',sd);}
+    setMetaTag('meta[property="og:title"]',document.title);
+    setMetaTag('meta[name="twitter:title"]',document.title);
+    var sc=document.head.querySelector('link[rel="canonical"]');
+    if(sc)sc.setAttribute('href',SITE+'media');
+  }
 }
 function resizeImage(file,maxW,quality,cb){
   var reader=new FileReader();
@@ -2036,14 +2600,16 @@ function closeTwitch(){var m=document.getElementById('twitchModal');m.classList.
 function renderStats(){
   var allTeams=0,allPlayers=0,undef=0;
   eachDiv(function(d){allTeams+=d.teams.length;allPlayers+=d.players.length;undef+=d.teams.filter(function(t){return t.losses===0&&t.wins>0;}).length;});
+  /* A tile at zero is dropped rather than shown: a league in its first season should
+     not advertise "0 Champions Crowned". Each returns on its own once it has a value. */
   var items=[
-    {n:DB.meta.seasonsPlayed,l:'Seasons Played'},
+    {n:DB.meta.seasonsPlayed,l:(+DB.meta.seasonsPlayed===1?'Season':'Seasons')},
     {n:allTeams,l:'Teams'},
     {n:allPlayers,l:'Players'},
     {n:(DB.meta.divOrder||[]).length,l:'Divisions'},
-    {n:DB.meta.champions,l:'Champions Crowned'},
-    {n:undef,l:'Undefeated Teams'}
-  ];
+    {n:DB.meta.champions,l:(+DB.meta.champions===1?'Champion Crowned':'Champions Crowned')},
+    {n:undef,l:(undef===1?'Undefeated Team':'Undefeated Teams')}
+  ].filter(function(it){return (+it.n||0)>0;});
   document.getElementById('statsBand').innerHTML=items.map(function(it,i){
     return '<div class="stat reveal '+(i?('d'+Math.min(i,4)):'')+'"><div class="num" data-count="'+it.n+'">0</div><div class="lbl">'+it.l+'</div></div>';
   }).join('');
@@ -2211,13 +2777,71 @@ function applyRouteDivision(){
   DB.meta.activeDivision=d;persist();
   return true;
 }
+/* ---- Per-route metadata ----
+   Every route gets its own title, description and canonical URL. Google renders
+   JavaScript, so this is read; link-preview crawlers do not, which is why the
+   static tags in <head> stay as a sensible default for shared links. */
+var SITE='https://tpaleague.com/';
+var META={
+  home:{t:'The Program Association — Where Koreatown Competes',
+        d:"Koreatown's premier adult basketball league in Los Angeles. Live standings, stats, rosters, schedules and highlights from TPA."},
+  about:{t:'About TPA — Adult Basketball in Koreatown, Los Angeles',
+         d:'How The Program Association built a competitive, community-driven adult basketball league in Koreatown, Los Angeles.'},
+  league:{t:'Standings & Stats',
+          d:'Live standings, point differential and statistical leaders for the {div} of The Program Association, Koreatown, Los Angeles.'},
+  teams:{t:'Teams',
+         d:'Every team in the {div} of TPA, with full rosters and records — a competitive adult basketball league in Los Angeles.'},
+  schedule:{t:'Schedule',
+            d:'Game nights, results and upcoming fixtures for the {div} of TPA, played at St. Sophia Greek Cathedral in Koreatown, Los Angeles.'},
+  media:{t:'Media Hub — Highlights, Galleries & Koreatown Stories',
+         d:'Player of the Week, courtside galleries, live streams and community stories from The Program Association in Koreatown, Los Angeles.'},
+  rules:{t:'League Rules',
+         d:'Game format, conduct, standings tiebreakers and playoff qualification for the TPA adult basketball league in Los Angeles.'},
+  join:{t:'Join the League — Register for TPA Adult Basketball',
+        d:'Register a team or sign up as a free agent for The Program Association, an adult basketball league in Koreatown, Los Angeles.'},
+  contact:{t:'Contact TPA — Koreatown Basketball League',
+           d:'Get in touch with The Program Association, an adult basketball league playing in Koreatown, Los Angeles.'},
+  story:{t:'Stories of Koreatown',
+         d:'Community news, food, events, business and culture from around Koreatown, Los Angeles.'}
+};
 function pageTitle(route){
-  var base='The Program Association — Where Koreatown Competes';
-  if(DIV_ROUTES.indexOf(route)<0)return base;
-  var d=DB.divisions&&DB.divisions[DB.meta.activeDivision];
-  if(!d)return base;
-  var label={league:'Standings & Stats',teams:'Teams',schedule:'Schedule'}[route];
-  return d.name+' — '+label+' · The Program Association';
+  var m=META[route]||META.home;
+  if(route==='home')return m.t;
+  if(DIV_ROUTES.indexOf(route)>=0){
+    var d=DB.divisions&&DB.divisions[DB.meta.activeDivision];
+    if(d)return d.name+' — '+m.t+' · The Program Association';
+  }
+  return m.t+' · The Program Association';
+}
+/* The clean path for a route — a real URL the host serves via the _redirects rule. */
+function canonicalFor(route){
+  if(route==='home')return SITE;
+  if(DIV_ROUTES.indexOf(route)>=0){
+    var id=(DB.meta&&DB.meta.activeDivision)||'';
+    return SITE+route+(id?('/'+id):'');
+  }
+  if(route==='story')return SITE+'media';
+  return SITE+route;
+}
+function setMetaTag(sel,val){var el=document.head.querySelector(sel);if(el)el.setAttribute('content',val);}
+function applyMeta(route){
+  var m=META[route]||META.home;
+  var title=pageTitle(route);
+  var desc=m.d;
+  if(DIV_ROUTES.indexOf(route)>=0){
+    var d=DB.divisions&&DB.divisions[DB.meta.activeDivision];
+    desc=desc.replace('{div}',d?d.name:'league');
+  }
+  var url=canonicalFor(route);
+  document.title=title;
+  setMetaTag('meta[name="description"]',desc);
+  setMetaTag('meta[property="og:title"]',title);
+  setMetaTag('meta[property="og:description"]',desc);
+  setMetaTag('meta[property="og:url"]',url);
+  setMetaTag('meta[name="twitter:title"]',title);
+  setMetaTag('meta[name="twitter:description"]',desc);
+  var c=document.head.querySelector('link[rel="canonical"]');
+  if(c)c.setAttribute('href',url);
 }
 function activatePage(route){
   var target=document.getElementById('page-'+route)||document.getElementById('page-home');
@@ -2244,7 +2868,8 @@ function router(){
     var am=document.getElementById('adminMain');
     if(am&&am.style.display!=='none'&&typeof renderAdmin==='function')renderAdmin();
   }
-  if(r==='story'){renderStory();}else{document.title=pageTitle(r);}
+  applyMeta(r);
+  if(r==='story')renderStory();
 }
 window.addEventListener('hashchange',router);
 document.getElementById('year').textContent=new Date().getFullYear();
@@ -2255,6 +2880,19 @@ window.addEventListener('scroll',function(){
 var skip=document.getElementById('skipLink');
 if(skip)skip.addEventListener('click',function(e){e.preventDefault();var app=document.getElementById('app');if(app){app.setAttribute('tabindex','-1');app.focus();window.scrollTo(0,0);}});
 var burger=document.getElementById('burger'),mm=document.getElementById('mobileMenu');
+/* Desktop division menus: close as soon as a choice is made. Without this the menu
+   stays open because the pointer has not moved off the nav item yet. */
+document.querySelectorAll('.nav-drop').forEach(function(drop){
+  drop.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      drop.classList.add('picked');
+      /* Release :focus-within too, or a keyboard or tap activation holds it open. */
+      if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+    });
+  });
+  drop.addEventListener('mouseleave',function(){drop.classList.remove('picked');});
+  drop.addEventListener('mouseenter',function(){if(!drop.contains(document.activeElement))drop.classList.remove('picked');});
+});
 burger.addEventListener('click',function(){mm.classList.toggle('open');});
 burger.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();mm.classList.toggle('open');}});
 mm.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mm.classList.remove('open');});});
@@ -2488,7 +3126,7 @@ function tabResults(){
     '<div style="margin:8px 0 6px"><button class="btn-sm primary" id="saveMvp">Save MVP Race</button></div>';
 }
 function tabSchedule(){
-  var rows=DIV().schedule.slice().sort(function(a,b){return (a.week-b.week)||String(a.time||'').localeCompare(String(b.time||''));}).map(function(g){
+  var rows=DIV().schedule.slice().sort(function(a,b){return (a.week-b.week)||(timeMin(a.time)-timeMin(b.time));}).map(function(g){
     var a=teamById(g.aId),b=teamById(g.bId);
     return '<tr><td>Wk '+g.week+'</td><td>'+esc((g.date||'')+' '+(g.time||''))+'</td><td style="color:var(--white)">'+esc(a?a.name:'?')+' vs '+esc(b?b.name:'?')+'</td><td><button class="btn-sm danger" data-del-sched="'+g.id+'">Delete</button></td></tr>';
   }).join('');
@@ -2533,12 +3171,12 @@ function tabMedia(){
   var pl=(m.potwList||[]);
   var potwPrev = pl.length
     ? '<div class="potw-list">'+pl.map(function(e,i){
-        return '<div class="potw-item"><div class="thumb"><img src="'+e.photo+'"><button data-potw-del="'+i+'" title="Remove">✕</button></div>'+
+        return '<div class="potw-item"><div class="thumb"><img src="'+e.photo+'" alt="Player of the Week photo preview"><button data-potw-del="'+i+'" title="Remove">✕</button></div>'+
                '<input class="inp potw-name" data-potw-name="'+i+'" value="'+esc(e.name||'')+'" placeholder="Player name"></div>';
       }).join('')+'</div>'
     : '<div class="hint" style="margin-top:6px">No photos uploaded yet.</div>';
   var thumbs=(m.gallery||[]).map(function(src,i){
-    return '<div class="thumb"><img src="'+src+'"><button data-gal-del="'+i+'">✕</button></div>';
+    return '<div class="thumb"><img src="'+src+'" alt="Gallery photo preview"><button data-gal-del="'+i+'">✕</button></div>';
   }).join('');
   return '<h4>Players of the Week — Photos ('+pl.length+'/6)</h4><div class="hint">Several games run on a game night, so you can feature more than one player. Upload up to 6 photos (select several at once) and name each one. The tile shows the first photo and all the names; visitors tap it to flick through every photo. Leave every name blank to fall back to the scoring leader.</div>'+
     '<div class="fld"><label>Add photos</label><input class="inp" type="file" id="potwFile" accept="image/*" multiple'+(pl.length>=6?' disabled':'')+'></div>'+potwPrev+
@@ -2552,7 +3190,7 @@ function tabMedia(){
 function tileEditor(key,label){
   var t=(DB.media.tiles&&DB.media.tiles[key])||{title:'',sub:'',photo:null};
   var prev=t.photo
-    ? '<div class="thumb-grid" style="grid-template-columns:repeat(3,1fr)"><div class="thumb"><img src="'+t.photo+'"><button data-tile-del="'+key+'">✕</button></div></div>'
+    ? '<div class="thumb-grid" style="grid-template-columns:repeat(3,1fr)"><div class="thumb"><img src="'+t.photo+'" alt="'+esc(label)+' tile photo preview"><button data-tile-del="'+key+'">✕</button></div></div>'
     : '<div class="hint" style="margin-top:6px">No cover photo yet.</div>';
   var twitch=(key==='live')
     ? '<div class="row" style="margin-top:2px"><div class="fld"><label>Twitch channel (optional)</label><input class="inp" id="liveTwitchInp" value="'+esc(t.twitch||'')+'" placeholder="e.g. rmdleague"></div></div>'+
@@ -2566,7 +3204,7 @@ function tileEditor(key,label){
     '<div style="margin-top:6px"><button class="btn-sm primary" id="'+key+'Save">Save</button></div>';
 }
 function storyImgPrevHtml(src){
-  return src?'<div class="thumb-grid" style="grid-template-columns:repeat(3,1fr);margin-top:8px"><div class="thumb"><img src="'+esc(src)+'"><button type="button" id="stImgDel">✕</button></div></div>':'<div class="hint" style="margin-top:6px">No image yet — a clean branded placeholder shows on the card.</div>';
+  return src?'<div class="thumb-grid" style="grid-template-columns:repeat(3,1fr);margin-top:8px"><div class="thumb"><img src="'+esc(src)+'" alt="Story image preview"><button type="button" id="stImgDel">✕</button></div></div>':'<div class="hint" style="margin-top:6px">No image yet — a clean branded placeholder shows on the card.</div>';
 }
 function tabStories(){
   var editId=DB._editStory||'';
@@ -2706,7 +3344,16 @@ function tabSettings(){
       '<span id="statsStatus" class="hint" style="margin-left:10px">'+esc(sheetStatusText())+'</span></div></div>'+
     '<div class="row">'+
     '<div class="fld"><label>Game night — '+esc(DIV().name)+'</label><input class="inp" id="sNight" value="'+esc(DIV().night)+'"></div>'+
-    '<div class="fld"><label>Time</label><input class="inp" id="sTime" value="'+esc(m.time)+'"></div></div>'+
+    '<div class="fld"><label>Time</label><input class="inp" id="sTime" value="'+esc(m.time)+'"></div>'+
+    '<div class="fld"><label>Season start — '+esc(DIV().name)+'</label><input class="inp" id="sStart" type="date" value="'+esc(DIV().startDate||'')+'"></div></div>'+
+    '<h4 style="margin-top:26px">Registration</h4>'+
+    '<div class="hint">These drive the Join page and the deadline line on the homepage. Leave a field blank and the site shows \u201cTBA\u201d rather than guessing.</div>'+
+    '<div class="row"><div class="fld"><label>Registration is open</label><select class="inp" id="sRegOpen"><option value="1"'+(m.regOpen?' selected':'')+'>Yes \u2014 accepting sign-ups</option><option value="0"'+(m.regOpen?'':' selected')+'>No \u2014 collecting interest only</option></select></div>'+
+    '<div class="fld"><label>Season being registered</label><input class="inp" id="sRegSeason" value="'+esc(m.regSeason||'')+'"></div>'+
+    '<div class="fld"><label>Registration deadline</label><input class="inp" id="sRegDeadline" type="date" value="'+esc(m.regDeadline||'')+'"></div></div>'+
+    '<div class="row"><div class="fld"><label>Team fee</label><input class="inp" id="sTeamFee" value="'+esc(m.teamFee||'')+'" placeholder="$1,000"></div>'+
+    '<div class="fld"><label>Referee fee (per team, per game)</label><input class="inp" id="sRefFee" value="'+esc(m.refFee||'')+'" placeholder="$45"></div></div>'+
+    '<div class="row"><div class="fld" style="flex:1 1 100%"><label>What the league fee covers</label><input class="inp" id="sFeeIncludes" value="'+esc(m.feeIncludes||'')+'" placeholder="Games, stats, highlights and table fees"></div></div>'+
     '<div class="row"><div class="fld"><label>Seasons played</label><input class="inp" id="sSeasons" type="number" value="'+m.seasonsPlayed+'"></div>'+
     '<div class="fld"><label>Champions crowned</label><input class="inp" id="sChamps" type="number" value="'+m.champions+'"></div>'+
     '<div class="fld"><label>Current week</label><input class="inp" id="sWeek" type="number" value="'+m.week+'"></div></div>'+
@@ -2933,6 +3580,13 @@ function impLog(msg){var el=q('impLog');if(el)el.textContent=msg;}
   if(q('saveSettings'))q('saveSettings').addEventListener('click',function(){
     var m=DB.meta;m.season=q('sSeason').value;m.title=q('sTitle').value;m.venue=q('sVenue').value;if(q('sAddress'))m.address=q('sAddress').value.trim();if(q('sNight'))DIV().night=q('sNight').value;m.time=q('sTime').value;
     m.seasonsPlayed=+q('sSeasons').value||0;m.champions=+q('sChamps').value||0;m.week=+q('sWeek').value||1;if(q('sPin'))m.pin=q('sPin').value||'5130';
+    if(q('sStart'))DIV().startDate=q('sStart').value;
+    if(q('sRegOpen'))m.regOpen=q('sRegOpen').value==='1';
+    if(q('sRegSeason'))m.regSeason=q('sRegSeason').value.trim();
+    if(q('sRegDeadline'))m.regDeadline=q('sRegDeadline').value;
+    if(q('sTeamFee'))m.teamFee=q('sTeamFee').value.trim();
+    if(q('sRefFee'))m.refFee=q('sRefFee').value.trim();
+    if(q('sFeeIncludes'))m.feeIncludes=q('sFeeIncludes').value.trim();
     m.leagueEmail=q('sEmail').value.trim()||m.leagueEmail;m.web3key=q('sWeb3').value.trim();if(q('sStatsSheet'))m.statsSheet=q('sStatsSheet').value.trim();
     saveDB();renderAll();toast('Settings saved ✓');
   });
@@ -3094,6 +3748,7 @@ regOverlay.addEventListener('click',function(e){if(e.target===regOverlay)regOver
   var intro=document.getElementById('intro');if(!intro)return;
   var root=document.documentElement;
   if(root.classList.contains('intro-seen')){ if(intro.parentNode)intro.parentNode.removeChild(intro); return; }
+  try{localStorage.setItem('tpa_intro_seen','1');}catch(e){}
   try{sessionStorage.setItem('tpa_intro_seen','1');}catch(e){}
   var done=false;
   function finish(fast){
@@ -3117,6 +3772,11 @@ renderAll();
 setupLeaderboard();
 setupNews();
 router();
+/* A deep link that asked for a specific registration form (see the deep-link block in <head>). */
+if(window.__tpaOpenReg&&REG[window.__tpaOpenReg]){
+  var _rg=window.__tpaOpenReg;window.__tpaOpenReg=null;
+  setTimeout(function(){openReg(_rg);},300);
+}
 syncFromCloud().then(function(){return loadStatsSheet();}); /* cloud first, then the stats sheet on top */
 </script>
 </body>
