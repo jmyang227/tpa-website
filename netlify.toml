@@ -1,0 +1,13 @@
+# Netlify configuration for tpaleague.com
+#
+# Serves the single-page app for clean URLs such as /join, /register, /history
+# and /league/open. Real files — index.html, sitemap.xml, robots.txt, images —
+# are always served first; this rule only catches paths that match no file, and
+# hands them to the app, which reads the path and opens the right page.
+#
+# This replaces the _redirects file. Keep only one of the two.
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
