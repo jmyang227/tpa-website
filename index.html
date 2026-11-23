@@ -3737,6 +3737,52 @@ function archiveSeason(champs){
   toast((rec.label||'Season')+' archived ✓');
 }
 
+/* ---- Start New Season ----
+   Clears everything that belongs to the season just finished and leaves the
+   things you want to carry forward. Teams and rosters survive so they can be
+   edited rather than retyped; box scores, results, schedule, Game of the Week
+   and the MVP race are wiped, and every record goes back to 0-0.
+   Refuses to run until the current season has been archived, because the
+   archive reads these rosters to build its record. */
+function seasonIsArchived(){
+  var label=pkey(DB.meta.season||'');
+  if(!label)return false;
+  return (DB.seasons||[]).some(function(s){return pkey(s.label||'')===label;});
+}
+function newSeasonTally(){
+  var t={games:0,results:0,sched:0,teams:0,records:0,gotw:0,mvp:0};
+  eachDiv(function(d){
+    t.games+=(d.games||[]).length;
+    t.results+=(d.results||[]).length;
+    t.sched+=(d.schedule||[]).length;
+    t.teams+=(d.teams||[]).length;
+    t.records+=(d.teams||[]).filter(function(x){return (x.wins||0)||(x.losses||0);}).length;
+    if(d.gotw&&(d.gotw.aId||d.gotw.bId))t.gotw++;
+    t.mvp+=(d.mvp||[]).length;
+  });
+  return t;
+}
+/* "Season 1" -> "Season 2". Anything else is left for the admin to rename. */
+function nextSeasonLabel(label){
+  var m=String(label||'').match(/^(.*?)(\d+)\s*$/);
+  return m?(m[1]+(parseInt(m[2],10)+1)):'';
+}
+function startNewSeason(){
+  eachDiv(function(d){
+    d.games=[];d.results=[];d.schedule=[];
+    d.gotw={aId:'',bId:'',date:'',note:''};
+    d.mvp=[];
+    (d.teams||[]).forEach(function(t){t.wins=0;t.losses=0;});
+  });
+  DB.meta.week=1;
+  var nxt=nextSeasonLabel(DB.meta.season);
+  if(nxt)DB.meta.season=nxt;
+  DB.meta.title='';
+  if(DB.media)DB.media.potwList=[];
+  saveDB();renderAll();renderAdmin();
+  toast('New season started ✓'+(nxt?(' — now '+nxt):''));
+}
+
 /* Resolve a crest from an archived team name, using the same logo map the live
    site uses — archived seasons keep names only, never image data. */
 function archCrest(name,divId){
@@ -4228,6 +4274,25 @@ function tabSettings(){
         '<div class="hint">All-time: <b>'+AT.seasons+'</b> season'+(AT.seasons===1?'':'s')+' · <b>'+AT.teams+'</b> teams · <b>'+AT.players+'</b> unique players'+
         (AT.variants?' · <span style="color:var(--gold)">'+AT.variants+' name'+(AT.variants===1?'':'s')+' spelled inconsistently across seasons — worth tidying so nobody is counted twice</span>':'')+'.</div>';
     })()+
+    (function(){
+      var t=newSeasonTally(), ok=seasonIsArchived(), nxt=nextSeasonLabel(m.season);
+      return '<h4 style="margin-top:26px">Start New Season</h4>'+
+        '<div class="hint">Clears the season just finished and leaves you ready for the next one. '+
+        '<b>Removed:</b> box scores, results, the schedule, Game of the Week, the MVP race and Player of the Week photos, and every record goes back to 0\u20130. '+
+        '<b>Kept:</b> your teams and rosters, so you can edit them rather than retype them. Nothing in the archive is touched.</div>'+
+        (ok
+          ? '<div class="hint">About to clear: <b>'+t.games+'</b> stat line'+(t.games===1?'':'s')+
+            ' · <b>'+t.results+'</b> result'+(t.results===1?'':'s')+
+            ' · <b>'+t.sched+'</b> scheduled game'+(t.sched===1?'':'s')+
+            ' · <b>'+t.records+'</b> team record'+(t.records===1?'':'s')+
+            '. Keeping <b>'+t.teams+'</b> teams and their rosters.'+
+            (nxt?' The season label becomes <b>'+esc(nxt)+'</b>.':' Remember to update the season label above afterwards.')+'</div>'+
+            '<div class="row"><div class="fld" style="flex:1 1 100%">'+
+            '<button class="btn-sm danger" id="newSeasonBtn">Start new season</button></div></div>'
+          : '<div class="hint" style="color:var(--gold)"><b>Archive '+esc(m.season||'this season')+' first.</b> '+
+            'Nothing has been archived under that name yet, and the archive reads these rosters to build its record \u2014 clearing now would lose who played. Use the Season Archive above, then come back.</div>')+
+        '';
+    })()+
     '<h4 style="margin-top:26px">Registration Emails</h4>'+
     '<div class="hint">Where the Team / Free Agent / Volunteer forms send submissions. Get a free Web3Forms access key at web3forms.com (enter '+esc(m.leagueEmail||'your league email')+' there — no account needed — and paste the emailed key below). Until a key is set, forms open the visitor’s email app instead.</div>'+
     '<div class="row"><div class="fld"><label>League email (receives forms)</label><input class="inp" id="sEmail" value="'+esc(m.leagueEmail||'')+'"></div></div>'+
@@ -4253,6 +4318,20 @@ function wire(){
     var champs={};
     Object.keys(DB.divisions).forEach(function(id){var el=q('arch_'+id);if(el)champs[id]=el.value;});
     archiveSeason(champs);
+  });
+  if(q('newSeasonBtn'))q('newSeasonBtn').addEventListener('click',function(){
+    var t=newSeasonTally(), nxt=nextSeasonLabel(DB.meta.season);
+    var msg='Start a new season?\n\nThis permanently removes:\n'+
+      '  \u2022 '+t.games+' stat line'+(t.games===1?'':'s')+'\n'+
+      '  \u2022 '+t.results+' recorded result'+(t.results===1?'':'s')+'\n'+
+      '  \u2022 '+t.sched+' scheduled game'+(t.sched===1?'':'s')+'\n'+
+      '  \u2022 Game of the Week, the MVP race and Player of the Week photos\n'+
+      '  \u2022 Every win\u2013loss record (reset to 0\u20130)\n\n'+
+      'It keeps your '+t.teams+' teams and all rosters, and the archive is untouched.\n'+
+      (nxt?('The season label becomes "'+nxt+'".\n\n'):'\n')+
+      'This cannot be undone from the site \u2014 make sure you have exported a backup.';
+    if(!confirm(msg))return;
+    startNewSeason();
   });
   document.querySelectorAll('[data-del-season]').forEach(function(btn){btn.addEventListener('click',function(){
     var id=btn.dataset.delSeason;
